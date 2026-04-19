@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ecoparque Buenos Aires</title>
+
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+
+  <style>
+    .ui-page { padding-top: 0 !important; background: #eef5ee; font-family: Arial, sans-serif; }
+
+    /* ===== HEADER ===== */
+    [data-role="header"] {
+      background: linear-gradient(135deg, #1b5e20, #2e7d32) !important;
+      border: none !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    [data-role="header"] h1 { color: white !important; font-size: 20px !important; font-weight: bold !important; }
+    [data-role="header"] a  { color: white !important; font-size: 14px !important; }
+
+    /* ===== TABS — UN SOLO BLOQUE SIN DUPLICADOS ===== */
+    .ui-tabs .ui-navbar {
+      background: #388e3c !important;
+      border-bottom: 2px solid #1b5e20 !important;
+    }
+    .ui-tabs .ui-navbar li a {
+      color: white !important;
+      font-size: 13px !important;
+      font-weight: bold !important;
+      padding: 10px 4px !important;
+      background: transparent !important;
+    }
+    .ui-tabs .ui-navbar li a.ui-btn-active {
+      background: #1b5e20 !important;
+      color: white !important;
+      border-bottom: 4px solid #c8e6c9 !important;
+    }
+
+    /* ===== TARJETAS LISTA ===== */
+    .zoo-list { list-style: none; margin: 0; padding: 12px; background: #f1f8e9; }
+    .zoo-list li { margin-bottom: 12px; }
+
+    .zoo-card {
+      display: flex; align-items: center;
+      background: white; border-radius: 18px; overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+      text-decoration: none; min-height: 105px;
+      border: 1px solid #dfe8df;
+    }
+    .zoo-card-img {
+      width: 105px; height: 105px; flex-shrink: 0;
+      overflow: hidden; background: #c8e6c9;
+      display: flex; align-items: center; justify-content: center; font-size: 46px;
+    }
+    .zoo-card-img img { width: 105px; height: 105px; object-fit: cover; display: block; }
+    .zoo-card-body { padding: 14px; flex: 1; }
+    .zoo-card-body h3 { margin: 0 0 6px; font-size: 18px; font-weight: bold; color: #1b5e20; }
+    .zoo-card-body p  { margin: 0; font-size: 14px; color: #555; font-style: italic; }
+    .zoo-card-arrow   { padding: 0 16px; font-size: 28px; color: #43a047; font-weight: bold; }
+
+    /* ===== BUSCADOR ===== */
+    .buscador-wrap { padding: 12px; background: #f1f8e9; }
+    .buscador-wrap input {
+      width: 100%; padding: 12px 16px; border-radius: 28px;
+      border: 2px solid #a5d6a7; font-size: 15px;
+      background: white; box-sizing: border-box; outline: none; color: #222;
+    }
+    .buscador-wrap input:focus { border-color: #2e7d32; }
+
+    /* ===== HERO DETALLE ===== */
+    .det-hero { position: relative; height: 260px; overflow: hidden; background: #c8e6c9; }
+    .det-hero img { width: 100%; height: 260px; object-fit: cover; object-position: center center; display: block; }
+    .det-hero-emoji {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      font-size: 80px; opacity: 0.25; pointer-events: none;
+    }
+    .det-hero-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.82));
+      padding: 40px 16px 16px;
+    }
+    .det-hero-nombre { color: white; font-size: 26px; font-weight: bold; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.95); }
+    .det-hero-cient  { color: rgba(255,255,255,0.95); font-size: 15px; font-style: italic; margin: 5px 0 0; text-shadow: 0 1px 5px rgba(0,0,0,0.8); }
+
+    /* ===== CUERPO DETALLE ===== */
+    .det-body { padding: 18px; background: #fafafa; }
+    .badge { display: inline-block; padding: 7px 16px; border-radius: 22px; font-size: 13px; font-weight: bold; color: white; margin-bottom: 16px; }
+    .b-mamifero { background: #c62828; }
+    .b-ave      { background: #1565c0; }
+    .b-reptil   { background: #2e7d32; }
+
+    .det-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .det-grid-item { background: white; border-radius: 12px; padding: 12px; border-left: 4px solid #66bb6a; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    .det-grid-item .lbl { font-size: 11px; color: #777; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; font-weight: bold; }
+    .det-grid-item .val { font-size: 15px; font-weight: bold; color: #1b5e20; line-height: 1.3; }
+
+    .estado-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #f1f8e9; border: 1px solid #a5d6a7;
+      border-radius: 20px; padding: 7px 14px;
+      font-size: 14px; margin-bottom: 14px; color: #333; font-weight: bold;
+    }
+    .dato-curioso {
+      background: linear-gradient(135deg, #e8f5e9, #f9fbe7);
+      border-left: 5px solid #43a047; border-radius: 0 14px 14px 0;
+      padding: 14px 16px; font-size: 15px; color: #333; line-height: 1.7;
+    }
+    .dato-curioso strong { color: #1b5e20; }
+
+    .ver-mas-btn {
+      display: block; margin: 16px 0 0;
+      background: #2e7d32; color: white;
+      text-align: center; padding: 13px; border-radius: 12px;
+      text-decoration: none; font-size: 15px; font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* ===== FOOTER ===== */
+    [data-role="footer"] {
+      background: linear-gradient(135deg,#1b5e20,#2e7d32) !important;
+      border: none !important;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+    }
+    [data-role="footer"] .ui-navbar { background: transparent !important; }
+    [data-role="footer"] .ui-navbar a {
+      color: white !important;
+      font-size: 12px !important;
+      font-weight: bold !important;
+      padding: 10px 4px !important;
+    }
+    [data-role="footer"] .ui-navbar a.ui-btn-active {
+      background: rgba(0,0,0,0.28) !important;
+      color: #dcedc8 !important;
+    }
+
+    /* ===== INFO CARDS ===== */
+    .info-section { padding: 10px; background: #f1f8e9; min-height: 100vh; }
+    .info-card { background: white; border-radius: 16px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .info-card-header { background: linear-gradient(135deg,#2e7d32,#43a047); color: white; padding: 11px 14px; font-size: 15px; font-weight: bold; }
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border-bottom: 1px solid #f0f0f0; font-size: 14px; gap: 10px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .lbl { color: #444; }
+    .info-row .val { font-weight: bold; color: #1b5e20; text-align: right; max-width: 55%; line-height: 1.4; }
+
+    /* ===== BANNER ===== */
+    .banner-eco { background: linear-gradient(135deg, #1b5e20, #388e3c); padding: 18px 16px 14px; color: white; }
+    .banner-eco h2 { margin: 0 0 6px; font-size: 22px; }
+    .banner-eco p  { margin: 0; font-size: 14px; opacity: 0.95; line-height: 1.6; }
+    .banner-eco img { width: 100%; border-radius: 12px; margin-top: 12px; height: 180px; object-fit: cover; display: block; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .det-grid { grid-template-columns: 1fr; }
+      .det-hero { height: 220px; }
+      .det-hero img { height: 220px; }
+      .det-hero-nombre { font-size: 22px; }
+      .banner-eco h2 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     PANTALLA PRINCIPAL
+     ============================================================ -->
+<section data-role="page" id="zoo-inicio">
+
+  <div data-role="header">
+    <h1>🌿 Ecoparque Buenos Aires</h1>
+    <a href="#zoo-info" data-icon="info" class="ui-btn-right">Info</a>
+  </div>
+
+  <div data-role="content" style="padding:0; background:#f1f8e9;">
+
+    <div class="banner-eco">
+      <h2>Fauna Autóctona Argentina</h2>
+      <p>Conocé las especies que habitan el Ecoparque de Palermo, centro de conservación y educación ambiental de CABA.</p>
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/Mapa%20Ecoparque.jpg"
+           onerror="this.style.display='none'" alt="Mapa Ecoparque">
+    </div>
+
+    <div data-role="tabs">
+      <div data-role="navbar">
+        <ul>
+          <li><a href="#tab-mamiferos" class="ui-btn-active">🦁 MAMÍFEROS</a></li>
+          <li><a href="#tab-aves">🐦 AVES</a></li>
+          <li><a href="#tab-reptiles">🐊 REPTILES</a></li>
+          <li><a href="#tab-actividades">🎪 ACTIVIDADES</a></li>
+        </ul>
+      </div>
+
+      <!-- ===== MAMÍFEROS ===== -->
+      <div id="tab-mamiferos" style="background:#f1f8e9;">
+        <div class="buscador-wrap">
+          <input type="text" placeholder="🔍  Buscar mamífero..." oninput="filtrar(this,'lista-mami')">
+        </div>
+        <ul class="zoo-list" id="lista-mami">
+
+          <li data-n="carpincho capibara">
+            <a href="#det-carpincho" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://buenosaires.gob.ar/sites/default/files/media/image/2021/05/10/8a9db29964c421825d8289e12d0f535f125e4b25.jpg"
+                     onerror="this.parentNode.innerHTML='🦫'" alt="Carpincho">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Carpincho</h3>
+                <p>Hydrochoerus hydrochaeris</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="tapir anta">
+            <a href="#det-tapir" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://buenosaires.gob.ar/sites/default/files/media/image/2021/05/10/28810c117511002b7c63ae0418c14d610c9c1642.jpg"
+                     onerror="this.parentNode.innerHTML='🐾'" alt="Tapir">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Tapir</h3>
+                <p>Tapirus terrestris</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="guanaco camelido patagonia">
+            <a href="#det-guanaco" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://buenosaires.gob.ar/sites/default/files/media/image/2021/05/11/9c5d5e5e9dcb680707e7539b9eacd3744f03b06e.jpg"
+                     onerror="this.parentNode.innerHTML='🦙'" alt="Guanaco">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Guanaco</h3>
+                <p>Lama guanicoe</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="cai mono yungas">
+            <a href="#det-cai" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/cai%20de%20las%20yungas.jpg"
+                     onerror="this.parentNode.innerHTML='🐒'" alt="Caí de las Yungas">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Caí de las Yungas</h3>
+                <p>Sapajus cay</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="mara patagonica liebre">
+            <a href="#det-mara" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/mara%281%29.jpg"
+                     onerror="this.parentNode.innerHTML='🐇'" alt="Mara">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Mara Patagónica</h3>
+                <p>Dolichotis patagonum</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="coipo nutria">
+            <a href="#det-coipo" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/coipo.jpg"
+                     onerror="this.parentNode.innerHTML='🦦'" alt="Coipo">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Coipo</h3>
+                <p>Myocastor coypus</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- ===== AVES ===== -->
+      <div id="tab-aves" style="background:#f1f8e9;">
+        <div class="buscador-wrap">
+          <input type="text" placeholder="🔍  Buscar ave..." oninput="filtrar(this,'lista-aves')">
+        </div>
+        <ul class="zoo-list" id="lista-aves">
+
+          <li data-n="nandu avestruz">
+            <a href="#det-nandu" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/nandu.jpg"
+                     onerror="this.parentNode.innerHTML='🦤'" alt="Ñandú">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Ñandú</h3>
+                <p>Rhea americana</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="flamenco austral rosa">
+            <a href="#det-flamenco" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/flamenco%20austral.jpg"
+                     onerror="this.parentNode.innerHTML='🦩'" alt="Flamenco Austral">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Flamenco Austral</h3>
+                <p>Phoenicopterus chilensis</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="chaja ave humedal">
+            <a href="#det-chaja" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/chaja.jpg"
+                     onerror="this.parentNode.innerHTML='🐦'" alt="Chajá">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Chajá</h3>
+                <p>Chauna torquata</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="cardenal comun rojo">
+            <a href="#det-cardenal" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/cardenal%20rojo.jpg"
+                     onerror="this.parentNode.innerHTML='🐦'" alt="Cardenal Común">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Cardenal Común</h3>
+                <p>Paroaria coronata</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="condor andino cordillera">
+            <a href="#det-condor" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/condor%281%29.jpg"
+                     onerror="this.parentNode.innerHTML='🦅'" alt="Cóndor Andino">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Cóndor Andino</h3>
+                <p>Vultur gryphus</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="picaflor colibri verde">
+            <a href="#det-picaflor" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/colibri.jpg"
+                     onerror="this.parentNode.innerHTML='🐦'" alt="Picaflor Verde">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Picaflor Verde</h3>
+                <p>Chlorostilbon lucidus</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- ===== REPTILES ===== -->
+      <div id="tab-reptiles" style="background:#f1f8e9;">
+        <div class="buscador-wrap">
+          <input type="text" placeholder="🔍  Buscar reptil..." oninput="filtrar(this,'lista-rept')">
+        </div>
+        <ul class="zoo-list" id="lista-rept">
+
+          <li data-n="yacare overo corrientes">
+            <a href="#det-yacare" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Caiman_latirostris_01.jpg/160px-Caiman_latirostris_01.jpg"
+                     onerror="this.parentNode.innerHTML='🐊'" alt="Yacaré">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Yacaré Overo</h3>
+                <p>Caiman latirostris</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="tortuga terrestre argentina">
+            <a href="#det-tortuga" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src="\DISEÑO DE SISTEMAS1\tortuga.jpg"
+                     onerror="this.parentNode.innerHTML='🐢'" alt="Tortuga">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Tortuga Terrestre</h3>
+                <p>Chelonoidis chilensis</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+          <li data-n="yarara serpiente venenosa">
+            <a href="#det-yarara" class="zoo-card">
+              <div class="zoo-card-img">
+                <img src= "yarara.jpg"
+                     onerror="this.parentNode.innerHTML='🐍'" alt="Yarará">
+              </div>
+              <div class="zoo-card-body">
+                <h3>Yarará</h3>
+                <p>Bothrops alternatus</p>
+              </div>
+              <div class="zoo-card-arrow">›</div>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- ===== ACTIVIDADES ===== -->
+      <div id="tab-actividades" style="background:#f1f8e9; padding:8px;">
+        <div class="info-card">
+          <div class="info-card-header">🎪 ACTIVIDADES DESTACADAS</div>
+          <div class="info-row"><span class="lbl">🏥 Hospital Veterinario</span><span class="val">Visita guiada especial</span></div>
+          <div class="info-row"><span class="lbl">🐘 El camino de Kuky y Pupy</span><span class="val">Elefantas africanas</span></div>
+          <div class="info-row"><span class="lbl">🌿 Botánica nativa</span><span class="val">Flora argentina</span></div>
+          <div class="info-row"><span class="lbl">🏛️ Patrimonio histórico</span><span class="val">44 edificios centenarios</span></div>
+          <div class="info-row"><span class="lbl">🌊 Mundo GEA</span><span class="val">Museo del Mar + VR + 4D</span></div>
+          <div class="info-row"><span class="lbl">🦋 Paseo de mariposas</span><span class="val">Experiencia inmersiva</span></div>
+          <div class="info-row"><span class="lbl">🎠 Carrusel</span><span class="val">Para toda la familia</span></div>
+          <div class="info-row"><span class="lbl">🎒 Visitas escolares</span><span class="val">Programa educativo</span></div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-header">🚫 NO SE PERMITE INGRESAR CON</div>
+          <div class="info-row"><span class="lbl">🐕 Mascotas</span><span class="val">Prohibido</span></div>
+          <div class="info-row"><span class="lbl">🍺 Bebidas alcohólicas</span><span class="val">Prohibido</span></div>
+          <div class="info-row"><span class="lbl">🥫 Latas o vidrios</span><span class="val">Prohibido</span></div>
+          <div class="info-row"><span class="lbl">🚲 Bicicletas / rodados</span><span class="val">Prohibido</span></div>
+          <div class="info-row"><span class="lbl">⚽ Pelotas / globos</span><span class="val">Prohibido</span></div>
+        </div>
+        <a href="https://buenosaires.gob.ar/gcaba_historico/vicejefatura/ambiente/ecoparque/visitanos"
+           target="_blank" class="ver-mas-btn">🌐 Ver más en el sitio oficial del Ecoparque</a>
+      </div>
+
+    </div><!-- fin tabs -->
+  </div><!-- fin content -->
+
+  <div data-role="footer" data-position="fixed">
+    <nav data-role="navbar">
+      <ul>
+        <li><a href="#zoo-inicio"   data-icon="home"     class="ui-btn-active">Inicio</a></li>
+        <li><a href="#zoo-horarios" data-icon="clock">Horarios</a></li>
+        <li><a href="#zoo-mapa"     data-icon="location">Mapa</a></li>
+        <li><a href="#zoo-info"     data-icon="info">Info</a></li>
+      </ul>
+    </nav>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     DETALLES: MAMÍFEROS
+     ============================================================ -->
+
+<!-- CARPINCHO -->
+<section data-role="page" id="det-carpincho">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Carpincho</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="\DISEÑO DE SISTEMAS1\yarara.jpg"
+           onerror="this.style.display='none'" alt="Carpincho">
+      <div class="det-hero-emoji">🦫</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Carpincho</p>
+        <p class="det-hero-cient">Hydrochoerus hydrochaeris</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-mamifero">🦁 Mamífero</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Humedales y ríos</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Herbívoro</div></div>
+        <div class="det-grid-item"><div class="lbl">Peso</div><div class="val">35 – 65 kg</div></div>
+        <div class="det-grid-item"><div class="lbl">Región</div><div class="val">Corrientes, Entre Ríos</div></div>
+      </div>
+      <div class="estado-chip">🟢 Preocupación menor</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es el <strong>roedor más grande del mundo</strong>. Vive en grupos de hasta 20 individuos. Los Esteros del Iberá son su principal refugio en Argentina.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TAPIR -->
+<section data-role="page" id="det-tapir">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Tapir</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://buenosaires.gob.ar/sites/default/files/media/image/2021/05/10/28810c117511002b7c63ae0418c14d610c9c1642.jpg"
+           onerror="this.style.display='none'" alt="Tapir">
+      <div class="det-hero-emoji">🐾</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Tapir</p>
+        <p class="det-hero-cient">Tapirus terrestris</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-mamifero">🦁 Mamífero</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Selvas tropicales</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Herbívoro</div></div>
+        <div class="det-grid-item"><div class="lbl">Peso</div><div class="val">150 – 300 kg</div></div>
+        <div class="det-grid-item"><div class="lbl">Región</div><div class="val">Misiones, Salta, Jujuy</div></div>
+      </div>
+      <div class="estado-chip">⚠️ Vulnerable en Argentina</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es el <strong>mamífero terrestre más grande de Sudamérica</strong>. Su pequeña trompa prensil le permite agarrar hojas y ramas. Es excelente nadador.</div>
+    </div>
+  </div>
+</section>
+
+<!-- GUANACO -->
+<section data-role="page" id="det-guanaco">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Guanaco</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://buenosaires.gob.ar/sites/default/files/media/image/2021/05/11/9c5d5e5e9dcb680707e7539b9eacd3744f03b06e.jpg"
+           onerror="this.style.display='none'" alt="Guanaco">
+      <div class="det-hero-emoji">🦙</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Guanaco</p>
+        <p class="det-hero-cient">Lama guanicoe</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-mamifero">🦁 Mamífero</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Estepa y montaña</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Herbívoro</div></div>
+        <div class="det-grid-item"><div class="lbl">Peso</div><div class="val">90 – 140 kg</div></div>
+        <div class="det-grid-item"><div class="lbl">Velocidad</div><div class="val">hasta 56 km/h</div></div>
+      </div>
+      <div class="estado-chip">🟢 Preocupación menor</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es el camélido salvaje más grande de Sudamérica. Su lana es tan fina como el cashmere. Vive desde la Patagonia hasta Tierra del Fuego.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAÍ DE LAS YUNGAS -->
+<section data-role="page" id="det-cai">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Caí de las Yungas</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/cai%20de%20las%20yungas.jpg"
+           onerror="this.style.display='none'" alt="Caí de las Yungas">
+      <div class="det-hero-emoji">🐒</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Caí de las Yungas</p>
+        <p class="det-hero-cient">Sapajus cay</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-mamifero">🦁 Mamífero</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Selvas de Yungas</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Omnívoro</div></div>
+        <div class="det-grid-item"><div class="lbl">Peso</div><div class="val">2 – 4 kg</div></div>
+        <div class="det-grid-item"><div class="lbl">Región</div><div class="val">Jujuy, Salta, Tucumán</div></div>
+      </div>
+      <div class="estado-chip">⚠️ Vulnerable</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es el único primate nativo del noroeste argentino. Usa herramientas para romper nueces y vive en grupos de hasta 20 individuos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARA -->
+<section data-role="page" id="det-mara">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Mara Patagónica</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/mara%281%29.jpg"
+           onerror="this.style.display='none'" alt="Mara Patagónica">
+      <div class="det-hero-emoji">🐇</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Mara Patagónica</p>
+        <p class="det-hero-cient">Dolichotis patagonum</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-mamifero">🦁 Mamífero</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Estepa patagónica</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Herbívora</div></div>
+        <div class="det-grid-item"><div class="lbl">Peso</div><div class="val">8 – 16 kg</div></div>
+        <div class="det-grid-item"><div class="lbl">Endemismo</div><div class="val">🇦🇷 Solo en Argentina</div></div>
+      </div>
+      <div class="estado-chip">⚠️ Casi amenazada</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es el único animal <strong>endémico de Argentina</strong>: solo vive en nuestro país. Parece un cruce entre liebre y ciervo, pero es un roedor.</div>
+    </div>
+  </div>
+</section>
+
+<!-- COIPO -->
+<section data-role="page" id="det-coipo">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Coipo</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/coipo.jpg"
+           onerror="this.style.display='none'" alt="Coipo">
+      <div class="det-hero-emoji">🦦</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Coipo</p>
+        <p class="det-hero-cient">Myocastor coypus</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-mamifero">🦁 Mamífero</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Ríos y lagunas</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Herbívoro acuático</div></div>
+        <div class="det-grid-item"><div class="lbl">Peso</div><div class="val">5 – 9 kg</div></div>
+        <div class="det-grid-item"><div class="lbl">Región</div><div class="val">Todo el país</div></div>
+      </div>
+      <div class="estado-chip">🟢 Preocupación menor</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> También llamado nutria, es un roedor semiacuático con patas palmeadas. Su pelaje impermeable fue muy codiciado en la industria peletera.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     DETALLES: AVES
+     ============================================================ -->
+
+<!-- ÑANDÚ -->
+<section data-role="page" id="det-nandu">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Ñandú</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/nandu.jpg"
+           onerror="this.style.display='none'" alt="Ñandú">
+      <div class="det-hero-emoji">🦤</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Ñandú</p>
+        <p class="det-hero-cient">Rhea americana</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-ave">🐦 Ave</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Praderas y pastizales</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Omnívoro</div></div>
+        <div class="det-grid-item"><div class="lbl">Altura</div><div class="val">1,5–1,8 m · 40 kg</div></div>
+        <div class="det-grid-item"><div class="lbl">Velocidad</div><div class="val">hasta 60 km/h</div></div>
+      </div>
+      <div class="estado-chip">⚠️ Casi amenazado</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es el <strong>ave más grande de América</strong>. No vuela pero corre a gran velocidad. El macho incuba solo y cuida a los pichones por 6 meses.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FLAMENCO -->
+<section data-role="page" id="det-flamenco">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Flamenco Austral</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/flamenco%20austral.jpg"
+           onerror="this.style.display='none'" alt="Flamenco Austral">
+      <div class="det-hero-emoji">🦩</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Flamenco Austral</p>
+        <p class="det-hero-cient">Phoenicopterus chilensis</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-ave">🐦 Ave</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Lagunas y salares</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Algas y crustáceos</div></div>
+        <div class="det-grid-item"><div class="lbl">Altura</div><div class="val">80 – 110 cm</div></div>
+        <div class="det-grid-item"><div class="lbl">Región</div><div class="val">NOA, Patagonia, CABA</div></div>
+      </div>
+      <div class="estado-chip">⚠️ Casi amenazado</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Su color rosado viene de los pigmentos de las algas que come. Los pichones nacen blancos y tardan 3 años en tomar su color definitivo.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAJÁ -->
+<section data-role="page" id="det-chaja">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Chajá</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/chaja.jpg"
+           onerror="this.style.display='none'" alt="Chajá">
+      <div class="det-hero-emoji">🐦</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Chajá</p>
+        <p class="det-hero-cient">Chauna torquata</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-ave">🐦 Ave</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Humedales y bañados</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Hierbas y semillas</div></div>
+        <div class="det-grid-item"><div class="lbl">Peso</div><div class="val">hasta 5 kg</div></div>
+        <div class="det-grid-item"><div class="lbl">Región</div><div class="val">NEA y centro del país</div></div>
+      </div>
+      <div class="estado-chip">🟢 Preocupación menor</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Su grito puede escucharse a varios kilómetros. Tiene dos espolones óseos en cada ala que usa para defenderse de depredadores.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CARDENAL -->
+<section data-role="page" id="det-cardenal">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Cardenal Común</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/cardenal%20rojo.jpg"
+           onerror="this.style.display='none'" alt="Cardenal Común">
+      <div class="det-hero-emoji">🐦</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Cardenal Común</p>
+        <p class="det-hero-cient">Paroaria coronata</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-ave">🐦 Ave</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Montes y arbustales</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Semillas e insectos</div></div>
+        <div class="det-grid-item"><div class="lbl">Tamaño</div><div class="val">17 – 19 cm</div></div>
+        <div class="det-grid-item"><div class="lbl">Región</div><div class="val">Centro y norte del país</div></div>
+      </div>
+      <div class="estado-chip">🟢 Preocupación menor</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es una de las aves más coloridas de Argentina. El macho tiene la cabeza roja brillante con cresta. Muy apreciado por su canto melodioso.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓNDOR -->
+<section data-role="page" id="det-condor">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Cóndor Andino</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/condor%281%29.jpg"
+           onerror="this.style.display='none'" alt="Cóndor Andino">
+      <div class="det-hero-emoji">🦅</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Cóndor Andino</p>
+        <p class="det-hero-cient">Vultur gryphus</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-ave">🐦 Ave</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Cordillera y Patagonia</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Carroñero</div></div>
+        <div class="det-grid-item"><div class="lbl">Envergadura</div><div class="val">hasta 3,2 metros</div></div>
+        <div class="det-grid-item"><div class="lbl">Longevidad</div><div class="val">más de 70 años</div></div>
+      </div>
+      <div class="estado-chip">⚠️ Vulnerable</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es el <strong>ave no marina de mayor envergadura del planeta</strong>. Vuela hasta 5.000 m de altura sin aletear usando corrientes térmicas.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PICAFLOR -->
+<section data-role="page" id="det-picaflor">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Picaflor Verde</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/colibri.jpg"
+           onerror="this.style.display='none'" alt="Picaflor Verde">
+      <div class="det-hero-emoji">🐦</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Picaflor Verde</p>
+        <p class="det-hero-cient">Chlorostilbon lucidus</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-ave">🐦 Ave</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Jardines y selvas</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Néctar e insectos</div></div>
+        <div class="det-grid-item"><div class="lbl">Tamaño</div><div class="val">8 – 9 cm · 3 g</div></div>
+        <div class="det-grid-item"><div class="lbl">Aleteo</div><div class="val">50 veces por segundo</div></div>
+      </div>
+      <div class="estado-chip">🟢 Preocupación menor</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es el único pájaro que puede volar hacia atrás. Su corazón late 1.200 veces por minuto en vuelo y tiene el metabolismo más alto de todos los vertebrados.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     DETALLES: REPTILES
+     ============================================================ -->
+
+<!-- YACARÉ -->
+<section data-role="page" id="det-yacare">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Yacaré Overo</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Caiman_latirostris_01.jpg/640px-Caiman_latirostris_01.jpg"
+           onerror="this.style.display='none'" alt="Yacaré Overo">
+      <div class="det-hero-emoji">🐊</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Yacaré Overo</p>
+        <p class="det-hero-cient">Caiman latirostris</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-reptil">🐊 Reptil</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Ríos y esteros NEA</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Carnívoro</div></div>
+        <div class="det-grid-item"><div class="lbl">Longitud</div><div class="val">hasta 3 metros</div></div>
+        <div class="det-grid-item"><div class="lbl">Región</div><div class="val">Corrientes, Misiones</div></div>
+      </div>
+      <div class="estado-chip">🟢 Preocupación menor</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Los Esteros del Iberá tienen la <strong>mayor densidad de yacarés del mundo</strong>. La temperatura del nido determina el sexo de las crías.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TORTUGA -->
+<section data-role="page" id="det-tortuga">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Tortuga Terrestre</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="\DISEÑO DE SISTEMAS1\tortuga.jpg"
+           onerror="this.style.display='none'" alt="Tortuga Terrestre">
+      <div class="det-hero-emoji">🐢</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Tortuga Terrestre</p>
+        <p class="det-hero-cient">Chelonoidis chilensis</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-reptil">🐊 Reptil</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Monte árido</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Herbívora</div></div>
+        <div class="det-grid-item"><div class="lbl">Longitud</div><div class="val">20 – 40 cm</div></div>
+        <div class="det-grid-item"><div class="lbl">Longevidad</div><div class="val">más de 60 años</div></div>
+      </div>
+      <div class="estado-chip">⚠️ Vulnerable</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Su comercio como mascota es <strong>ilegal en Argentina</strong> aunque sigue siendo muy común. Es una de las tortugas más australes del mundo.</div>
+    </div>
+  </div>
+</section>
+
+<!-- YARARÁ -->
+<section data-role="page" id="det-yarara">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>Yarará</h1>
+  </div>
+  <div data-role="content" style="padding:0; background:#fafafa;">
+    <div class="det-hero">
+      <img src="\DISEÑO DE SISTEMAS1\yarara.jpg"
+           onerror="this.style.display='none'" alt="Yarará">
+      <div class="det-hero-emoji">🐍</div>
+      <div class="det-hero-overlay">
+        <p class="det-hero-nombre">Yarará Grande</p>
+        <p class="det-hero-cient">Bothrops alternatus</p>
+      </div>
+    </div>
+    <div class="det-body">
+      <span class="badge b-reptil">🐊 Reptil</span>
+      <div class="det-grid">
+        <div class="det-grid-item"><div class="lbl">Hábitat</div><div class="val">Pastizales y monte</div></div>
+        <div class="det-grid-item"><div class="lbl">Alimentación</div><div class="val">Carnívora</div></div>
+        <div class="det-grid-item"><div class="lbl">Longitud</div><div class="val">80 cm – 1,6 m</div></div>
+        <div class="det-grid-item"><div class="lbl">Región</div><div class="val">Centro y norte</div></div>
+      </div>
+      <div class="estado-chip">🟢 Preocupación menor</div>
+      <div class="dato-curioso">💡 <strong>¿Sabías que?</strong> Es la serpiente venenosa más frecuente en Argentina. Solo ataca si se siente amenazada. El <strong>suero antiofídico</strong> se fabrica en Argentina desde hace más de 100 años.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     HORARIOS
+     ============================================================ -->
+<section data-role="page" id="zoo-horarios">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>🕐 Horarios y Acceso</h1>
+  </div>
+  <div data-role="content" style="background:#f1f8e9; padding:0;">
+    <div class="info-section">
+      <div class="info-card">
+        <div class="info-card-header">🗓️ DÍAS Y HORARIOS</div>
+        <div class="info-row"><span class="lbl">Días</span><span class="val">Martes a Domingos y feriados</span></div>
+        <div class="info-row"><span class="lbl">Horario</span><span class="val">11:00 – 18:00 hs</span></div>
+        <div class="info-row"><span class="lbl">Lunes</span><span class="val">Cerrado</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-header">📍 CÓMO LLEGAR</div>
+        <div class="info-row"><span class="lbl">Dirección</span><span class="val">Plaza Italia, Palermo, CABA</span></div>
+        <div class="info-row"><span class="lbl">Acceso principal</span><span class="val">Av. del Libertador y Las Heras</span></div>
+        <div class="info-row"><span class="lbl">Subte</span><span class="val">Línea D · Estación Plaza Italia</span></div>
+        <div class="info-row"><span class="lbl">Colectivos</span><span class="val">10, 41, 60, 67, 128, 130, 145</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-header">🎟️ ENTRADAS</div>
+        <div class="info-row"><span class="lbl">Visita general</span><span class="val">Consultar en sitio oficial</span></div>
+        <div class="info-row"><span class="lbl">Visitas especiales</span><span class="val">Con costo accesible</span></div>
+        <div class="info-row"><span class="lbl">Visitas escolares</span><span class="val">Gratuitas con reserva previa</span></div>
+      </div>
+      <a href="https://buenosaires.gob.ar/gcaba_historico/vicejefatura/ambiente/ecoparque/visitanos"
+         target="_blank" class="ver-mas-btn">🌐 Ver horarios actualizados en buenosaires.gob.ar</a>
+    </div>
+  </div>
+  <div data-role="footer" data-position="fixed">
+    <nav data-role="navbar"><ul>
+      <li><a href="#zoo-inicio"   data-icon="home">Inicio</a></li>
+      <li><a href="#zoo-horarios" data-icon="clock" class="ui-btn-active">Horarios</a></li>
+      <li><a href="#zoo-mapa"     data-icon="location">Mapa</a></li>
+      <li><a href="#zoo-info"     data-icon="info">Info</a></li>
+    </ul></nav>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     MAPA
+     ============================================================ -->
+<section data-role="page" id="zoo-mapa">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>🗺️ Mapa del Ecoparque</h1>
+  </div>
+  <div data-role="content" style="background:#f1f8e9; padding:0;">
+    <div class="info-section">
+      <div class="info-card" style="overflow:hidden;">
+        <div class="info-card-header">🗺️ PLANO OFICIAL</div>
+        <img src="https://static.buenosaires.gob.ar/sites/default/files/inline-images/Mapa%20Ecoparque.jpg"
+             style="width:100%; display:block;" onerror="this.style.display='none'" alt="Mapa del Ecoparque">
+      </div>
+      <div class="info-card">
+        <div class="info-card-header">📍 SECTORES DE ANIMALES AUTÓCTONOS</div>
+        <div class="info-row"><span class="lbl">01 Mara</span><span class="val">Sector norte</span></div>
+        <div class="info-row"><span class="lbl">02 Ñandú</span><span class="val">Sector central</span></div>
+        <div class="info-row"><span class="lbl">03 Chajá</span><span class="val">Sector lago</span></div>
+        <div class="info-row"><span class="lbl">07 Carpincho</span><span class="val">Área húmeda</span></div>
+        <div class="info-row"><span class="lbl">09 Tapir</span><span class="val">Sector selva</span></div>
+        <div class="info-row"><span class="lbl">14 Tortuga de Sierra</span><span class="val">Sector reptiles</span></div>
+        <div class="info-row"><span class="lbl">20 Cóndor</span><span class="val">Sector sur</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-header">🏪 SERVICIOS</div>
+        <div class="info-row"><span class="lbl">🚻 Sanitarios</span><span class="val">Distribuidos en el parque</span></div>
+        <div class="info-row"><span class="lbl">🍔 Gastronomía</span><span class="val">Varios puestos</span></div>
+        <div class="info-row"><span class="lbl">ℹ️ Informes</span><span class="val">Entrada principal</span></div>
+        <div class="info-row"><span class="lbl">🎠 Carrusel</span><span class="val">Sector central</span></div>
+      </div>
+      <a href="https://mapa.buenosaires.gob.ar/comollego/?lat=-34.581479&lng=-58.416731&zl=15&modo=transporte&dir=Ecoparque+de+la+Ciudad+de+Buenos+Aires"
+         target="_blank" class="ver-mas-btn">🗺️ Cómo llegar — Mapa oficial de CABA</a>
+    </div>
+  </div>
+  <div data-role="footer" data-position="fixed">
+    <nav data-role="navbar"><ul>
+      <li><a href="#zoo-inicio"   data-icon="home">Inicio</a></li>
+      <li><a href="#zoo-horarios" data-icon="clock">Horarios</a></li>
+      <li><a href="#zoo-mapa"     data-icon="location" class="ui-btn-active">Mapa</a></li>
+      <li><a href="#zoo-info"     data-icon="info">Info</a></li>
+    </ul></nav>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     INFO
+     ============================================================ -->
+<section data-role="page" id="zoo-info">
+  <div data-role="header">
+    <a href="#zoo-inicio" data-icon="back">Volver</a>
+    <h1>ℹ️ Sobre el Ecoparque</h1>
+  </div>
+  <div data-role="content" style="background:#f1f8e9; padding:0;">
+    <div class="info-section">
+      <div class="info-card" style="overflow:hidden;">
+        <img src="https://static.buenosaires.gob.ar/sites/default/files/styles/card_img_top/public/media/image/2021/06/02/1a63d913beb5df369d4d558350a4da3edc653b6d.jpg"
+             style="width:100%; height:160px; object-fit:cover; object-position:center 40%; display:block;"
+             onerror="this.style.display='none'" alt="Ecoparque">
+        <div class="info-card-header">🇦🇷 ECOPARQUE BUENOS AIRES</div>
+        <div class="info-row" style="display:block; padding:12px 14px; font-size:14px; color:#333; line-height:1.7;">
+          Centro educativo para la conservación de especies autóctonas en peligro de extinción, ubicado en Palermo. Colabora con la recuperación de la biodiversidad argentina y promueve la educación ambiental. Posee 16,7 hectáreas y 44 edificios patrimoniales con más de 130 años de historia.
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-header">📞 CONTACTO</div>
+        <div class="info-row"><span class="lbl">📍 Dirección</span><span class="val">Plaza Italia, Palermo, CABA</span></div>
+        <div class="info-row"><span class="lbl">🌐 Sitio oficial</span><span class="val"><a href="https://buenosaires.gob.ar/gcaba_historico/vicejefatura/ambiente/ecoparque" target="_blank">buenosaires.gob.ar</a></span></div>
+        <div class="info-row"><span class="lbl">📱 Instagram</span><span class="val">@ecoparqueba</span></div>
+        <div class="info-row"><span class="lbl">📘 Facebook</span><span class="val">/EcoparqueBA</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-header">📋 ESPECIES EN EL ECOPARQUE</div>
+        <div class="info-row"><span class="lbl">🦁 Mamíferos</span><span class="val">Carpincho, Tapir, Guanaco, Mara, Caí, Coipo</span></div>
+        <div class="info-row"><span class="lbl">🐦 Aves</span><span class="val">Ñandú, Flamenco, Cóndor, Chajá, Cardenal...</span></div>
+        <div class="info-row"><span class="lbl">🐊 Reptiles</span><span class="val">Yacaré, Tortuga terrestre, Yarará...</span></div>
+        <div class="info-row"><span class="lbl">🦋 Insectos</span><span class="val">Mariposas nativas</span></div>
+      </div>
+      <a href="https://buenosaires.gob.ar/gcaba_historico/ecoparque/especies-del-ecoparque"
+         target="_blank" class="ver-mas-btn">🌿 Ver todas las especies en el sitio oficial</a>
+    </div>
+  </div>
+  <div data-role="footer" data-position="fixed">
+    <nav data-role="navbar"><ul>
+      <li><a href="#zoo-inicio"   data-icon="home">Inicio</a></li>
+      <li><a href="#zoo-horarios" data-icon="clock">Horarios</a></li>
+      <li><a href="#zoo-mapa"     data-icon="location">Mapa</a></li>
+      <li><a href="#zoo-info"     data-icon="info" class="ui-btn-active">Info</a></li>
+    </ul></nav>
+  </div>
+</section>
+
+<script>
+function filtrar(input, listaId) {
+  var txt = input.value.toLowerCase();
+  var items = document.getElementById(listaId).querySelectorAll('li');
+  items.forEach(function(li) {
+    var haystack = (li.getAttribute('data-n') || '') + li.innerText;
+    li.style.display = haystack.toLowerCase().indexOf(txt) >= 0 ? '' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>
