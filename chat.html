@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chat</title>
+
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+
+  <style>
+    .ui-page { padding-top: 0 !important; }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .chat-content {
+      background: #ece5dd;
+      padding: 10px;
+      padding-bottom: 70px;
+      min-height: 100vh;
+    }
+
+    .burbuja-wrap { display: flex; margin: 6px 0; }
+    .burbuja-wrap.enviado  { justify-content: flex-end; }
+    .burbuja-wrap.recibido { justify-content: flex-start; }
+
+    .burbuja {
+      max-width: 75%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .burbuja-wrap.enviado  .burbuja { background: #dcf8c6; border-bottom-right-radius: 2px; }
+    .burbuja-wrap.recibido .burbuja { background: #ffffff; border-bottom-left-radius: 2px; }
+    .burbuja .nombre { font-weight: bold; font-size: 12px; margin-bottom: 3px; }
+    .burbuja .hora { font-size: 10px; color: #999; text-align: right; margin-top: 4px; }
+
+    .barra-escribir {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #f0f0f0; padding: 8px 10px;
+      display: flex; align-items: center; gap: 8px;
+      z-index: 9999; border-top: 1px solid #ccc;
+    }
+    .barra-escribir input {
+      flex: 1; padding: 10px 14px; border-radius: 25px;
+      border: 1px solid #ccc; font-size: 14px; outline: none;
+    }
+    .barra-escribir button {
+      background: #075e54; color: white; border: none;
+      border-radius: 50%; width: 42px; height: 42px; font-size: 18px; cursor: pointer;
+    }
+
+    [data-role="header"] { background-color: #075e54 !important; border-color: #075e54 !important; }
+    [data-role="header"] h1 { color: white !important; }
+    [data-role="header"] a, [data-role="header"] .ui-btn { color: white !important; }
+
+    .chat-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 10px 6px 50px;
+    }
+    .chat-header img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+    .chat-header .ch-nombre { color: white; font-weight: bold; font-size: 14px; }
+    .chat-header .ch-estado { color: #b2dfdb; font-size: 11px; }
+
+    .ui-tabs .ui-navbar { background: #075e54 !important; }
+    .ui-tabs .ui-navbar a { color: white !important; }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     PANTALLA PRINCIPAL
+     ============================================================ -->
+<section data-role="page" id="pantalla-inicio">
+  <div data-role="header">
+    <h1>💬 WhatsApp</h1>
+    <a href="#" data-icon="search" class="ui-btn-right">Buscar</a>
+  </div>
+
+  <div data-role="content" style="padding:0;">
+    <div data-role="tabs">
+      <div data-role="navbar">
+        <ul>
+          <li><a href="#tab-chats" class="ui-btn-active">CHATS</a></li>
+          <li><a href="#tab-estados">ESTADOS</a></li>
+          <li><a href="#tab-llamadas">LLAMADAS</a></li>
+        </ul>
+      </div>
+
+      <!-- TAB CHATS -->
+      <div id="tab-chats">
+        <ul data-role="listview">
+
+          <li>
+            <a href="#chat-maria">
+              <img class="avatar" src="foto1.png" alt="María"
+                   onerror="this.src='https://i.pravatar.cc/50?img=5'">
+              <h2>María González</h2>
+              <p>Che, ¿viste la tarea del profe? 😅</p>
+              <p class="ui-li-aside">17:45</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="#chat-sofia">
+              <img class="avatar" src="foto2.jpg" alt="Sofía"
+                   onerror="this.src='https://i.pravatar.cc/50?img=9'">
+              <h2>Sofía Herrera</h2>
+              <p>Ya terminé el de negocios 🙌</p>
+              <p class="ui-li-aside">17:38</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="#chat-lucia">
+              <img class="avatar" src="foto3.jpg" alt="Lucía"
+                   onerror="this.src='https://i.pravatar.cc/50?img=11'">
+              <h2>Lucía Ramírez</h2>
+              <p>Ok! Mañana lo terminamos 👍</p>
+              <p class="ui-li-aside">15:10</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="#chat-carlos">
+              <img class="avatar" src="foto4.jpg" alt="Carlos"
+                   onerror="this.src='https://i.pravatar.cc/50?img=8'">
+              <h2>Carlos Pérez</h2>
+              <p>¿Cómo se hace el list-divider?</p>
+              <p class="ui-li-aside">16:50</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="#chat-lucas">
+              <img class="avatar" src="foto6.png" alt="Lucas"
+                   onerror="this.src='https://i.pravatar.cc/50?img=12'">
+              <h2>Lucas Fernández</h2>
+              <p>Subo el código en un rato</p>
+              <p class="ui-li-aside">17:30</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="#chat-grupo">
+              <img class="avatar" src="https://i.pravatar.cc/50?img=20" alt="Grupo">
+              <h2>📚 Grupo Diseño de Sistemas</h2>
+              <p>Lucas: dale, lo vemos mañana</p>
+              <p class="ui-li-aside">17:55</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="#chat-profe">
+              <img class="avatar" src="https://i.pravatar.cc/50?img=14" alt="Profe">
+              <h2>CaFé Gorosito (Profe)</h2>
+              <p>Recuerden entregar antes del viernes</p>
+              <p class="ui-li-aside">12:00</p>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- TAB ESTADOS -->
+      <div id="tab-estados">
+        <ul data-role="listview">
+          <li data-role="list-divider">Mi estado</li>
+          <li>
+            <img class="avatar" src="foto4.jpg" alt="Yo" onerror="this.src='https://i.pravatar.cc/50?img=3'">
+            <h2>Mi estado</h2>
+            <p>Toca para agregar una actualización</p>
+          </li>
+          <li data-role="list-divider">Vistas recientemente</li>
+          <li>
+            <img class="avatar" src="foto1.png" alt="María" onerror="this.src='https://i.pravatar.cc/50?img=5'">
+            <h2>María González</h2>
+            <p>hace 10 minutos</p>
+          </li>
+          <li>
+            <img class="avatar" src="foto2.jpg" alt="Sofía" onerror="this.src='https://i.pravatar.cc/50?img=9'">
+            <h2>Sofía Herrera</h2>
+            <p>hace 30 minutos</p>
+          </li>
+          <li>
+            <img class="avatar" src="foto6.png" alt="Lucas" onerror="this.src='https://i.pravatar.cc/50?img=12'">
+            <h2>Lucas Fernández</h2>
+            <p>hace 1 hora</p>
+          </li>
+        </ul>
+      </div>
+
+      <!-- TAB LLAMADAS -->
+      <div id="tab-llamadas">
+        <ul data-role="listview">
+          <li data-role="list-divider">Recientes</li>
+          <li>
+            <img class="avatar" src="foto1.png" alt="María" onerror="this.src='https://i.pravatar.cc/50?img=5'">
+            <h2>María González</h2>
+            <p>📞 Llamada entrante · Hoy 14:30</p>
+          </li>
+          <li>
+            <img class="avatar" src="foto6.png" alt="Lucas" onerror="this.src='https://i.pravatar.cc/50?img=12'">
+            <h2>Lucas Fernández</h2>
+            <p>📞 Llamada saliente · Hoy 11:00</p>
+          </li>
+          <li>
+            <img class="avatar" src="https://i.pravatar.cc/50?img=14" alt="Profe">
+            <h2>CaFé Gorosito (Profe)</h2>
+            <p>📹 Videollamada · Ayer 18:00</p>
+          </li>
+          <li>
+            <img class="avatar" src="foto3.jpg" alt="Lucía" onerror="this.src='https://i.pravatar.cc/50?img=11'">
+            <h2>Lucía Ramírez</h2>
+            <p>📞 Llamada entrante · Ayer 16:20</p>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAT: MARÍA
+     ============================================================ -->
+<section data-role="page" id="chat-maria">
+  <div data-role="header">
+    <a href="#pantalla-inicio" data-icon="back" class="ui-btn-left">Volver</a>
+    <div class="chat-header">
+      <img src="foto1.png" alt="María" onerror="this.src='https://i.pravatar.cc/50?img=5'">
+      <div>
+        <div class="ch-nombre">María González</div>
+        <div class="ch-estado">en línea</div>
+      </div>
+    </div>
+  </div>
+  <div data-role="content" class="chat-content">
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#075e54;">María</div>
+        Hola! ¿Cómo estás?
+        <div class="hora">17:40</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Todo bien! Haciendo la tarea de jQuery Mobile 😅
+        <div class="hora">17:41</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#075e54;">María</div>
+        Ay no, yo también... son como 6 ejercicios 😭
+        <div class="hora">17:42</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Sí, estoy con el de los negocios del barrio. Ya casi 💪
+        <div class="hora">17:43</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#075e54;">María</div>
+        Qué crack! Me pasás el código después? 🙏
+        <div class="hora">17:44</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Jaja claro, cuando termine te mando 😄
+        <div class="hora">17:45</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="barra-escribir">
+    <input type="text" placeholder="Escribe un mensaje...">
+    <button>➤</button>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAT: SOFÍA
+     ============================================================ -->
+<section data-role="page" id="chat-sofia">
+  <div data-role="header">
+    <a href="#pantalla-inicio" data-icon="back" class="ui-btn-left">Volver</a>
+    <div class="chat-header">
+      <img src="foto2.jpg" alt="Sofía" onerror="this.src='https://i.pravatar.cc/50?img=9'">
+      <div>
+        <div class="ch-nombre">Sofía Herrera</div>
+        <div class="ch-estado">en línea</div>
+      </div>
+    </div>
+  </div>
+  <div data-role="content" class="chat-content">
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Sofi, ¿cómo te fue con el trabajo de negocios?
+        <div class="hora">17:20</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#8e44ad;">Sofía</div>
+        Bien! Lo terminé recién. Puse 15 negocios de Ayacucho 😊
+        <div class="hora">17:25</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Wow, sos una máquina! Yo llegué a 10 nomás 😅
+        <div class="hora">17:30</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#8e44ad;">Sofía</div>
+        Jaja usé Google Maps para buscarlos. Tip para la próxima 😉
+        <div class="hora">17:33</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#8e44ad;">Sofía</div>
+        Ya terminé el de negocios 🙌
+        <div class="hora">17:38</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="barra-escribir">
+    <input type="text" placeholder="Escribe un mensaje...">
+    <button>➤</button>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAT: LUCÍA
+     ============================================================ -->
+<section data-role="page" id="chat-lucia">
+  <div data-role="header">
+    <a href="#pantalla-inicio" data-icon="back" class="ui-btn-left">Volver</a>
+    <div class="chat-header">
+      <img src="foto3.jpg" alt="Lucía" onerror="this.src='https://i.pravatar.cc/50?img=11'">
+      <div>
+        <div class="ch-nombre">Lucía Ramírez</div>
+        <div class="ch-estado">en línea</div>
+      </div>
+    </div>
+  </div>
+  <div data-role="content" class="chat-content">
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Lu, ¿terminaste el trabajo de zoológico?
+        <div class="hora">14:55</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#27ae60;">Lucía</div>
+        No todavía, me falta el detalle de los animales
+        <div class="hora">15:00</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Igual yo, lo terminamos mañana juntos?
+        <div class="hora">15:05</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#27ae60;">Lucía</div>
+        Ok! Mañana lo terminamos 👍
+        <div class="hora">15:10</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="barra-escribir">
+    <input type="text" placeholder="Escribe un mensaje...">
+    <button>➤</button>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAT: CARLOS
+     ============================================================ -->
+<section data-role="page" id="chat-carlos">
+  <div data-role="header">
+    <a href="#pantalla-inicio" data-icon="back" class="ui-btn-left">Volver</a>
+    <div class="chat-header">
+      <img src="foto4.jpg" alt="Carlos" onerror="this.src='https://i.pravatar.cc/50?img=8'">
+      <div>
+        <div class="ch-nombre">Carlos Pérez</div>
+        <div class="ch-estado">última vez hoy a las 17:00</div>
+      </div>
+    </div>
+  </div>
+  <div data-role="content" class="chat-content">
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#2980b9;">Carlos</div>
+        Ey, ¿cómo se hace el listview con list-divider?
+        <div class="hora">16:48</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Le ponés al li: data-role="list-divider" y listo
+        <div class="hora">16:49</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Ej: &lt;li data-role="list-divider"&gt;Título&lt;/li&gt;
+        <div class="hora">16:49</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#2980b9;">Carlos</div>
+        Ahh re fácil, gracias! 🙏
+        <div class="hora">16:50</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#2980b9;">Carlos</div>
+        ¿Y el data-filter cómo va?
+        <div class="hora">16:52</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        En el ul ponés data-filter="true" y data-filter-placeholder="Buscar..."
+        <div class="hora">16:53</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#2980b9;">Carlos</div>
+        Genio! Ya funciona 🎉
+        <div class="hora">16:55</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="barra-escribir">
+    <input type="text" placeholder="Escribe un mensaje...">
+    <button>➤</button>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAT: LUCAS
+     ============================================================ -->
+<section data-role="page" id="chat-lucas">
+  <div data-role="header">
+    <a href="#pantalla-inicio" data-icon="back" class="ui-btn-left">Volver</a>
+    <div class="chat-header">
+      <img src="foto6.png" alt="Lucas" onerror="this.src='https://i.pravatar.cc/50?img=12'">
+      <div>
+        <div class="ch-nombre">Lucas Fernández</div>
+        <div class="ch-estado">en línea</div>
+      </div>
+    </div>
+  </div>
+  <div data-role="content" class="chat-content">
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#e67e22;">Lucas</div>
+        Che, ¿arrancaste con el de cancionero?
+        <div class="hora">17:10</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Todavía no, me queda ese y el del zoológico 😬
+        <div class="hora">17:12</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#e67e22;">Lucas</div>
+        Yo hice el cancionero con data-role="tabs" por género musical
+        <div class="hora">17:15</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Buena idea! ¿Pop, Rock y Cumbia?
+        <div class="hora">17:16</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#e67e22;">Lucas</div>
+        Exacto jaja. Subo el código en un rato 😄
+        <div class="hora">17:30</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="barra-escribir">
+    <input type="text" placeholder="Escribe un mensaje...">
+    <button>➤</button>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAT: GRUPO DISEÑO DE SISTEMAS ← ESTE ESTABA CORTADO
+     ============================================================ -->
+<section data-role="page" id="chat-grupo">
+  <div data-role="header">
+    <a href="#pantalla-inicio" data-icon="back" class="ui-btn-left">Volver</a>
+    <div class="chat-header">
+      <img src="https://i.pravatar.cc/50?img=20" alt="Grupo">
+      <div>
+        <div class="ch-nombre">Diseño de Sistemas A</div>
+        <div class="ch-estado">Sofía, María, Carlos, Lucas y vos</div>
+      </div>
+    </div>
+  </div>
+  <div data-role="content" class="chat-content">
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#e67e22;">Lucas</div>
+        Gente, ¿alguien entendió cómo hacer el data-role="tabs"?
+        <div class="hora">16:10</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#8e44ad;">Sofía</div>
+        Sí! Es como un navbar pero con contenido en cada pestaña
+        <div class="hora">16:12</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Exacto, cada tab tiene su div con id propio 👆
+        <div class="hora">16:15</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#2980b9;">Carlos</div>
+        Ah piola! Ya lo entendí, gracias 🙌
+        <div class="hora">16:20</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#27ae60;">Lucía</div>
+        ¿Alguien hizo el del zoológico? Necesito ayuda 😬
+        <div class="hora">17:35</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#c0392b;">María</div>
+        Yo tampoco lo arranqué todavía 😅
+        <div class="hora">17:38</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Mañana nos juntamos y lo hacemos todos juntos
+        <div class="hora">17:50</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#8e44ad;">Sofía</div>
+        Buena idea! A las 10 en el Joaquín?
+        <div class="hora">17:52</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#e67e22;">Lucas</div>
+        dale, lo vemos mañana 👍
+        <div class="hora">17:55</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="barra-escribir">
+    <input type="text" placeholder="Escribe un mensaje...">
+    <button>➤</button>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CHAT: PROFE CAFÉ GOROSITO ← ESTE ESTABA VACÍO
+     ============================================================ -->
+<section data-role="page" id="chat-profe">
+  <div data-role="header">
+    <a href="#pantalla-inicio" data-icon="back" class="ui-btn-left">Volver</a>
+    <div class="chat-header">
+      <img src="https://i.pravatar.cc/50?img=14" alt="Profe">
+      <div>
+        <div class="ch-nombre">CaFé Gorosito</div>
+        <div class="ch-estado">última vez hoy a las 12:00</div>
+      </div>
+    </div>
+  </div>
+  <div data-role="content" class="chat-content">
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#d35400;">CaFé Gorosito</div>
+        Buen día! Recuerden que la tarea U1-T1 se entrega antes del viernes.
+        <div class="hora">11:50</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#d35400;">CaFé Gorosito</div>
+        Los ejercicios son 6: lista de contactos, WhatsApp, negocios del Joaquín, chat, zoológico y cancionero 📋
+        <div class="hora">11:55</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#d35400;">CaFé Gorosito</div>
+        Recuerden entregar antes del viernes ⏰
+        <div class="hora">12:00</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Buenas profe! Entendido, gracias 🙏
+        <div class="hora">12:30</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#d35400;">CaFé Gorosito</div>
+        👍
+        <div class="hora">12:31</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Profe, ¿el zoológico tiene que tener imágenes de los animales?
+        <div class="hora">17:00</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#d35400;">CaFé Gorosito</div>
+        Sería ideal, pero lo más importante es que funcione bien con jQuery Mobile 😊
+        <div class="hora">17:05</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap enviado">
+      <div class="burbuja">
+        Perfecto profe, muchas gracias! Ya casi termino todo 💪
+        <div class="hora">17:06</div>
+      </div>
+    </div>
+
+    <div class="burbuja-wrap recibido">
+      <div class="burbuja">
+        <div class="nombre" style="color:#d35400;">CaFé Gorosito</div>
+        Excelente! Cualquier duda me escriben 😊
+        <div class="hora">17:08</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="barra-escribir">
+    <input type="text" placeholder="Escribe un mensaje...">
+    <button>➤</button>
+  </div>
+</section>
+
+</body>
+</html>
