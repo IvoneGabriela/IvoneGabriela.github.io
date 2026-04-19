@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Semáforo</title>
+  <link href="https://cdn.simplecss.org/simple.css" rel="stylesheet"/>
+  <link rel="icon" href="\Semaforo\logo.png"/>
+  <style>
+    body {
+      background-image: linear-gradient(45deg, black, skyblue);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    svg {
+      display: block;
+      margin: 0 auto;
+      width: 500px;
+      height: auto;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: gold;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Semáforo</h1>
+  <button id="idBotonReiniciar">Actualizar</button>
+  <button id="idBotonActivarSemaforo">Activar semáforo</button>
+  <button id="idBotonDetenerSemaforo">Detener</button>
+</header>
+
+<main>
+  <svg viewBox="0 0 800 600" width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+    <g id="Layer_1">
+      <title>Layer 1</title>
+      <ellipse ry="205.5" rx="146" cy="299.5" cx="350" stroke="black" fill="plum"/>
+      <ellipse id="idEstrella" ry="46.5" rx="70.5" cy="207.5" cx="347.5" stroke="black" fill="lightcoral"/>
+      <ellipse id="idCirculo" ry="46.5" rx="70.5" cy="329.5" cx="351.5" stroke="black" fill="lightyellow"/>
+      <ellipse id="idCorazon" ry="46.5" rx="70.5" cy="439.5" cx="352.5" stroke="black" fill="lightgreen"/>
+    </g>
+  </svg>
+</main>
+
+<footer>
+  <p>Semaforo 2026 - Gabriela Roldan</p>
+</footer>
+
+<script>
+  var _timer = null;
+
+  idBotonReiniciar.onclick       = fnApagarLuces;
+  idBotonActivarSemaforo.onclick = fnComenzar;
+  idBotonDetenerSemaforo.onclick = fnDetener;
+
+  function fnComenzar()
+  {
+    fnDetener();
+    fnARojo1();
+  }
+
+  function fnDetener()
+  {
+    clearTimeout(_timer);
+    _timer = null;
+  }
+
+  function fnApagarLuces()
+  {
+    fnDetener();
+    idEstrella.style.fill = "lightcoral";
+    idCirculo.style.fill  = "lightyellow";
+    idCorazon.style.fill  = "lightgreen";
+  }
+
+  function fnARojo1()
+  {
+    idEstrella.style.fill = "lightcoral";
+    idCirculo.style.fill  = "lightyellow";
+    idCorazon.style.fill  = "lightgreen";
+    idEstrella.style.fill = "red";
+    _timer = setTimeout(fnAAmarillo1, 3000);
+  }
+
+  function fnAAmarillo1()
+  {
+    idEstrella.style.fill = "lightcoral";
+    idCirculo.style.fill  = "lightyellow";
+    idCorazon.style.fill  = "lightgreen";
+    idCirculo.style.fill = "yellow";
+    _timer = setTimeout(fnAVerde1, 1000);
+  }
+
+  function fnAVerde1()
+  {
+    idEstrella.style.fill = "lightcoral";
+    idCirculo.style.fill  = "lightyellow";
+    idCorazon.style.fill  = "lightgreen";
+    idCorazon.style.fill = "green";
+    _timer = setTimeout(fnAAmarillo2, 3000);
+  }
+
+  function fnAAmarillo2()
+  {
+    idEstrella.style.fill = "lightcoral";
+    idCirculo.style.fill  = "lightyellow";
+    idCorazon.style.fill  = "lightgreen";
+    idCirculo.style.fill = "yellow";
+    _timer = setTimeout(fnARojo1, 1000);
+  }
+
+  // ============================================================
+  // Trabajo realizado por Gabriela Roldan
+  // Inteligencia Artificial- 2026
+  // ============================================================
+</script>
+
+</body>
+</html>

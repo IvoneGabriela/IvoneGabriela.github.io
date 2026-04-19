@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Semáforo Arduino</title>
+  <link rel="icon" href="logo.png"/>
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+  <script src="https://unpkg.com/@wokwi/elements@0.48.3/dist/wokwi-elements.bundle.js"></script>
+  <style>
+    body {
+      background-image: linear-gradient(45deg, black, skyblue);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    wokwi-led {
+      width: 80px;
+      height: 80px;
+      margin: 10px;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: gold;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Semáforo para Arduino</h1>
+
+  <wokwi-led color="#C00"       id="idEstrella"></wokwi-led>
+  <wokwi-led color="darkorange" id="idCirculo"></wokwi-led>
+  <wokwi-led color="darkgreen"  id="idCorazon"></wokwi-led>
+
+  <hr>
+
+  <button id="idBotonActivarSemaforo">Activar semáforo</button>
+  <button id="idBotonDetenerSemaforo">Detener semáforo</button>
+</header>
+
+<footer>
+  <p>Semaforo Arduino 2026 - Gabriela Roldan</p>
+</footer>
+
+<script>
+  var $timer = null;
+
+  idBotonActivarSemaforo.onclick = fnComenzar;
+  idBotonDetenerSemaforo.onclick = fnDetener;
+
+  function fnComenzar()
+  {
+    fnDetener();
+    fnARojo1();
+  }
+
+  function fnARojo1()
+  {
+    fnApagarLuces();
+    idEstrella.value = 1;
+    $timer = setTimeout(fnAAmarillo1, 3000);
+  }
+
+  function fnAAmarillo1()
+  {
+    fnApagarLuces();
+    idCirculo.value = 1;
+    $timer = setTimeout(fnAVerde1, 1000);
+  }
+
+  function fnAVerde1()
+  {
+    fnApagarLuces();
+    idCorazon.value = 1;
+    $timer = setTimeout(fnAAmarillo2, 3000);
+  }
+
+  function fnAAmarillo2()
+  {
+    fnApagarLuces();
+    idCirculo.value = 1;
+    $timer = setTimeout(fnARojo1, 1000);
+  }
+
+  function fnDetener()
+  {
+    clearTimeout($timer);
+    $timer = null;
+    fnApagarLuces();
+  }
+
+  function fnApagarLuces()
+  {
+    idEstrella.value = 0;
+    idCirculo.value  = 0;
+    idCorazon.value  = 0;
+  }
+
+  // ============================================================
+  // Trabajo realizado por Gabriela Roldan
+  // Inteligencia Artificial - 2026
+  // ============================================================
+</script>
+
+</body>
+</html>
