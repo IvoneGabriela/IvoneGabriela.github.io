@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Negocios cercanos al JVG</title>
+
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+
+  <style>
+    img.negocio-img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .ui-content { padding: 10px; }
+    .detalle { padding: 15px; line-height: 1.8; }
+    .detalle p { margin: 6px 0; }
+    .detalle a { color: #0078c8; word-break: break-all; }
+    .estrellas { color: #f5a623; }
+    .badge-rubro {
+      display: inline-block;
+      background: #0078c8;
+      color: white;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===================== PANTALLA PRINCIPAL ===================== -->
+  <section data-role="page" id="idPantallaPrincipal">
+
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="home" class="ui-btn-left">Inicio</a>
+      <h1>Negocios cercanos al JVG</h1>
+      <a href="#pantallaInfo" data-icon="info" class="ui-btn-right">Info</a>
+    </div>
+
+    <div data-role="content">
+      <p style="font-size:0.85em; color:#666; padding:5px 10px;">
+        📍 Prof. Joaquín V. González · Ayacucho 632, Balvanera, CABA · A 2 cuadras a la redonda
+      </p>
+      <ul data-role="listview" data-inset="true" data-filter="true" data-filter-placeholder="Buscar negocio...">
+
+        <li data-role="list-divider">☕ Cafeterías y Restaurantes</li>
+
+        <li>
+          <a href="#pantallaCafe1">
+            <img class="negocio-img" src="negocio1.jpg"
+              onerror="this.src='https://placehold.co/80x80/f5a623/fff?text=Café'" alt="W Ayacucho Resto">
+            <h2>W Ayacucho Resto</h2>
+            <p>Café, desayunos y almuerzos · Ayacucho 688</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="#pantallaGrecco">
+            <img class="negocio-img" src="negocio2.jpg"
+              onerror="this.src='https://placehold.co/80x80/6a5acd/fff?text=Grecco'" alt="Grecco">
+            <h2>Grecco</h2>
+            <p>Bar y restaurante · Ayacucho 302</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="#pantallaPastrypanas">
+            <img class="negocio-img" src="negocio3.jpg"
+              onerror="this.src='https://placehold.co/80x80/e07b39/fff?text=Pastry'" alt="Pastrypanas">
+            <h2>Pastrypanas</h2>
+            <p>Panadería y empanadas · Ayacucho 503</p>
+          </a>
+        </li>
+
+        <li data-role="list-divider">🍕 Pizzerías</li>
+
+        <li>
+          <a href="#pantallaFugazi">
+            <img class="negocio-img" src="negocio4.jpg"
+              onerror="this.src='https://placehold.co/80x80/c0392b/fff?text=Fugazi'" alt="Fugazi Pizza">
+            <h2>Fugazi Pizza</h2>
+            <p>Pizzería artesanal · Ayacucho 683</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="#pantallaTomasso">
+            <img class="negocio-img" src="negocio5.jpg"
+              onerror="this.src='https://placehold.co/80x80/922b21/fff?text=Tomasso'" alt="Tomasso">
+            <h2>Tomasso</h2>
+            <p>Pizzería económica · Ayacucho 437</p>
+          </a>
+        </li>
+
+        <li data-role="list-divider">🥖 Panaderías</li>
+
+        <li>
+          <a href="#pantallaAylPanaderia">
+            <img class="negocio-img" src="negocio6.jpg"
+              onerror="this.src='https://placehold.co/80x80/d4ac0d/fff?text=Pan'" alt="AyL Panadería">
+            <h2>AyL Panadería</h2>
+            <p>Pan, facturas y empanadas · Ayacucho 363</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="#pantallaDelPueblo">
+            <img class="negocio-img" src="negocio7.jpg"
+              onerror="this.src='https://placehold.co/80x80/b7950b/fff?text=Pueblo'" alt="Panaderías Del Pueblo">
+            <h2>Panaderías Del Pueblo</h2>
+            <p>Panadería artesanal · Ayacucho 429</p>
+          </a>
+        </li>
+
+        <li data-role="list-divider">📚 Librerías y Papelerías</li>
+
+        <li>
+          <a href="#pantallaComunicarte">
+            <img class="negocio-img" src="negocio8.jpg"
+              onerror="this.src='https://placehold.co/80x80/1a5276/fff?text=Libr.'" alt="Comunicarte">
+            <h2>Comunicarte</h2>
+            <p>Librería · Ayacucho 561</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="#pantallaPapelera">
+            <img class="negocio-img" src="negocio9.jpg"
+              onerror="this.src='https://placehold.co/80x80/154360/fff?text=Papel'" alt="Papelera Delonce">
+            <h2>Papelera Delonce</h2>
+            <p>Papelería y fotocopias · Lavalle 2277</p>
+          </a>
+        </li>
+
+        <li data-role="list-divider">💊 Farmacias</li>
+
+        <li>
+          <a href="#pantallaFarmaciaOnce">
+            <img class="negocio-img" src="negocio10.jpg"
+              onerror="this.src='https://placehold.co/80x80/1d8348/fff?text=Farm.'" alt="Farmacia Once">
+            <h2>Farmacia Once</h2>
+            <p>Farmacia · Lavalle 2099</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="#pantallaFarmaciaSEC">
+            <img class="negocio-img" src="negocio11.jpg"
+              onerror="this.src='https://placehold.co/80x80/196f3d/fff?text=F.SEC'" alt="Farmacia SEC Perón">
+            <h2>Farmacia SEC Perón</h2>
+            <p>Farmacia · Perón 2319</p>
+          </a>
+        </li>
+
+        <li data-role="list-divider">🥦 Fruterías y Dietéticas</li>
+
+        <li>
+          <a href="#pantallaPonderosa">
+            <img class="negocio-img" src="negocio12.jpg"
+              onerror="this.src='https://placehold.co/80x80/27ae60/fff?text=Frut.'" alt="Frutería La Ponderosa">
+            <h2>Frutería La Ponderosa</h2>
+            <p>Frutas y verduras · Ayacucho 423</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="#pantallaCallao">
+            <img class="negocio-img" src="negocio13.jpg"
+              onerror="this.src='https://placehold.co/80x80/229954/fff?text=Diet.'" alt="Dietética Callao">
+            <h2>Dietética Callao</h2>
+            <p>Productos naturales · Av. Callao 484</p>
+          </a>
+        </li>
+
+        <li data-role="list-divider">🍦 Heladerías</li>
+
+        <li>
+          <a href="#pantallaSorrento">
+            <img class="negocio-img" src="negocio14.jpg"
+              onerror="this.src='https://placehold.co/80x80/5dade2/fff?text=Helad.'" alt="Heladería Sorrento">
+            <h2>Heladería Sorrento</h2>
+            <p>Heladería y cafetería · Av. Rivadavia 2051</p>
+          </a>
+        </li>
+
+        <li data-role="list-divider">🏧 Cajeros / Bancos</li>
+
+        <li>
+          <a href="#pantallaBanco">
+            <img class="negocio-img" src="negocio15.jpg"
+              onerror="this.src='https://placehold.co/80x80/2e4057/fff?text=BNA'" alt="Cajero Banco Nación">
+            <h2>Cajero Banco Nación</h2>
+            <p>Cajero automático · Av. Corrientes 2156</p>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+    <footer data-role="footer" data-position="fixed">
+      <nav data-role="navbar">
+        <ul>
+          <li><a href="#idPantallaPrincipal" data-icon="shop" class="ui-btn-active">Locales</a></li>
+          <li><a href="#pantallaServicios" data-icon="grid">Servicios</a></li>
+          <li><a href="#pantallaUbicacion" data-icon="location">Ubicación</a></li>
+        </ul>
+      </nav>
+    </footer>
+  </section>
+
+  <!-- ===================== PANTALLA SERVICIOS ===================== -->
+  <section data-role="page" id="pantallaServicios">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back" class="ui-btn-left">Volver</a>
+      <h1>Servicios disponibles</h1>
+    </div>
+    <div data-role="content">
+      <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider">Gastronomía</li>
+        <li>☕ Cafeterías y desayunos</li>
+        <li>🍕 Pizzerías</li>
+        <li>🥐 Panaderías y pastelerías</li>
+        <li>🍦 Heladerías</li>
+        <li data-role="list-divider">Compras escolares</li>
+        <li>📚 Librerías y papelerías</li>
+        <li>🖨️ Fotocopias e impresiones</li>
+        <li>✏️ Útiles y carpetas</li>
+        <li data-role="list-divider">Salud y alimentación</li>
+        <li>💊 Farmacias</li>
+        <li>🥦 Fruterías y verduras</li>
+        <li>🌿 Productos naturales y dietéticos</li>
+        <li data-role="list-divider">Servicios bancarios</li>
+        <li>🏧 Cajeros automáticos</li>
+      </ul>
+    </div>
+    <footer data-role="footer" data-position="fixed">
+      <nav data-role="navbar">
+        <ul>
+          <li><a href="#idPantallaPrincipal" data-icon="shop">Locales</a></li>
+          <li><a href="#pantallaServicios" data-icon="grid" class="ui-btn-active">Servicios</a></li>
+          <li><a href="#pantallaUbicacion" data-icon="location">Ubicación</a></li>
+        </ul>
+      </nav>
+    </footer>
+  </section>
+
+  <!-- ===================== PANTALLA UBICACION ===================== -->
+  <section data-role="page" id="pantallaUbicacion">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back" class="ui-btn-left">Volver</a>
+      <h1>Ubicación</h1>
+    </div>
+    <div data-role="content">
+      <div class="detalle">
+        <p><strong>🏫 Instituto:</strong> Prof. Joaquín V. González</p>
+        <p><strong>📍 Dirección:</strong> Ayacucho 632, Balvanera, CABA</p>
+        <p><strong>📐 Radio cubierto:</strong> 2 cuadras a la redonda</p>
+        <p><strong>Calles comprendidas:</strong></p>
+        <ul style="padding-left:18px; line-height:2">
+          <li>Ayacucho (entre Lavalle y Corrientes)</li>
+          <li>Av. Corrientes (tramo cercano)</li>
+          <li>Lavalle (tramo cercano)</li>
+          <li>Av. Rivadavia (tramo cercano)</li>
+          <li>Av. Callao (tramo cercano)</li>
+        </ul>
+        <p><a href="https://maps.google.com/?q=Ayacucho+632,+Balvanera,+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+      </div>
+    </div>
+    <footer data-role="footer" data-position="fixed">
+      <nav data-role="navbar">
+        <ul>
+          <li><a href="#idPantallaPrincipal" data-icon="shop">Locales</a></li>
+          <li><a href="#pantallaServicios" data-icon="grid">Servicios</a></li>
+          <li><a href="#pantallaUbicacion" data-icon="location" class="ui-btn-active">Ubicación</a></li>
+        </ul>
+      </nav>
+    </footer>
+  </section>
+
+  <!-- ===================== PANTALLA INFO ===================== -->
+  <section data-role="page" id="pantallaInfo">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back" class="ui-btn-left">Volver</a>
+      <h1>Acerca de esta app</h1>
+    </div>
+    <div data-role="content">
+      <div class="detalle">
+        <p>Trabajo práctico para el Prof. Joaquín V. González (Ayacucho 632, Balvanera, CABA).</p>
+        <p>Muestra 15 negocios reales en un radio de dos cuadras al instituto.</p>
+        <p><strong>Autora:</strong> Gabriela Roldan</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DETALLES DE NEGOCIOS ==================== -->
+
+  <!-- 1. W Ayacucho Resto -->
+  <section data-role="page" id="pantallaCafe1">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>W Ayacucho Resto</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">☕ Cafetería / Restaurante</span>
+      <p><strong>Dirección:</strong> Ayacucho 688, Balvanera, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541127919991">+54 11 2791-9991</a></p>
+      <p><strong>Horario:</strong> Lun–Vie 7:00 AM – 7:00 PM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 4.1 (570 reseñas)</p>
+      <p><strong>Descripción:</strong> Café de especialidad, desayunos, brunch y almuerzos.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Excelente para desayunar, reuniones de estudio y WiFi.</p>
+      <p><a href="https://maps.google.com/?q=Ayacucho+688+Balvanera+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 2. Grecco -->
+  <section data-role="page" id="pantallaGrecco">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Grecco</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🍽️ Bar / Restaurante</span>
+      <p><strong>Dirección:</strong> Ayacucho 302, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541168587242">+54 11 6858-7242</a></p>
+      <p><strong>Horario:</strong> Lun–Sáb 7:30 AM – 12:00 AM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 3.8 (257 reseñas)</p>
+      <p><strong>Descripción:</strong> Bar de barrio con buena comida, jazz ambiental y cerveza fría.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Para almorzar o cenar con buena relación precio-calidad.</p>
+      <p><a href="https://maps.google.com/?q=Ayacucho+302+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 3. Pastrypanas -->
+  <section data-role="page" id="pantallaPastrypanas">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Pastrypanas</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🥐 Panadería / Empanadas</span>
+      <p><strong>Dirección:</strong> Ayacucho 503 PB, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541133741715">+54 11 3374-1715</a></p>
+      <p><strong>Horario:</strong> Lun–Sáb 9:30 AM – 12:00 AM | Dom 10:00 AM – 4:00 PM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 4.3 (97 reseñas)</p>
+      <p><strong>Descripción:</strong> Especialidad en empanadas venezolanas, panes artesanales y pastelería.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Empanadas rápidas durante los recreos o al salir de clase.</p>
+      <p><a href="https://maps.google.com/?q=Ayacucho+503+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 4. Fugazi Pizza -->
+  <section data-role="page" id="pantallaFugazi">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Fugazi Pizza</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🍕 Pizzería Artesanal</span>
+      <p><strong>Dirección:</strong> Ayacucho 683, Balvanera, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541139232853">+54 11 3923-2853</a></p>
+      <p><strong>Horario:</strong> Todos los días 8:00 PM – 12:00 AM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★★</span> 4.6 (519 reseñas)</p>
+      <p><strong>Descripción:</strong> Una de las mejores pizzerías de Buenos Aires. Estilo artesanal napolitano.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Ideal para cenar luego de clases nocturnas.</p>
+      <p><a href="https://maps.google.com/?q=Ayacucho+683+Balvanera+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 5. Tomasso -->
+  <section data-role="page" id="pantallaTomasso">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Tomasso</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🍕 Pizzería</span>
+      <p><strong>Dirección:</strong> Ayacucho 437, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541130976259">+54 11 3097-6259</a></p>
+      <p><strong>Horario:</strong> Lun–Jue 12:00–23:00 | Vie–Sáb 12:00–24:00 | Dom 20:00–23:00</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 4.2 (451 reseñas)</p>
+      <p><strong>Descripción:</strong> Pizzería económica con pedidos rápidos y buena relación calidad-precio.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Opción accesible para almorzar o cenar cerca del instituto.</p>
+      <p><a href="https://maps.google.com/?q=Ayacucho+437+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 6. AyL Panadería -->
+  <section data-role="page" id="pantallaAylPanaderia">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>AyL Panadería</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🥖 Panadería</span>
+      <p><strong>Dirección:</strong> Ayacucho 363, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541140586024">+54 11 4058-6024</a></p>
+      <p><strong>Horario:</strong> Lun–Vie 7:00 AM – 6:00 PM | Sáb 8:00 AM – 2:00 PM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★★</span> 5.0</p>
+      <p><strong>Descripción:</strong> Panadería de barrio con pan fresco, facturas y empanadas caseras.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Para desayunar o comprar algo rápido antes de entrar a clase.</p>
+      <p><a href="https://maps.google.com/?q=Ayacucho+363+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 7. Panaderías Del Pueblo -->
+  <section data-role="page" id="pantallaDelPueblo">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Panaderías Del Pueblo</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🥖 Panadería Artesanal</span>
+      <p><strong>Dirección:</strong> Ayacucho 429, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+5491161127408">+54 9 11 6112-7408</a></p>
+      <p><strong>Horario:</strong> Mar–Dom 5:00 AM – 9:00 PM (cerrado los lunes)</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 4.4 (481 reseñas)</p>
+      <p><strong>Descripción:</strong> Famosa por sus baguettes, panes oscuros y bases de pizza artesanales.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Abre muy temprano, ideal para el desayuno antes de clase.</p>
+      <p><a href="https://maps.google.com/?q=Ayacucho+429+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 8. Comunicarte -->
+  <section data-role="page" id="pantallaComunicarte">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Comunicarte</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">📚 Librería</span>
+      <p><strong>Dirección:</strong> Ayacucho 561, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541124868786">+54 11 2486-8786</a></p>
+      <p><strong>Horario:</strong> Lun–Vie 9:00 AM – 7:00 PM | Sáb 9:00 AM – 1:00 PM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 4.4 (44 reseñas)</p>
+      <p><strong>Descripción:</strong> Librería completa con amplia variedad de artículos y excelente atención.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Útiles, carpetas y apuntes. Sobre Ayacucho, a pasos del instituto.</p>
+      <p><a href="https://maps.google.com/?q=Ayacucho+561+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 9. Papelera Delonce -->
+  <section data-role="page" id="pantallaPapelera">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Papelera Delonce</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🖨️ Papelería / Fotocopias</span>
+      <p><strong>Dirección:</strong> Lavalle 2277, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541149512801">+54 11 4951-2801</a></p>
+      <p><strong>Horario:</strong> Lun–Vie 9:00 AM – 6:00 PM | Sáb 9:30 AM – 1:30 PM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 4.4 (459 reseñas)</p>
+      <p><strong>Descripción:</strong> Papelería con amplio surtido, fotocopias, útiles y envíos.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Fotocopias e impresiones a buen precio. A una cuadra del instituto.</p>
+      <p><a href="https://maps.google.com/?q=Lavalle+2277+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 10. Farmacia Once -->
+  <section data-role="page" id="pantallaFarmaciaOnce">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Farmacia Once</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">💊 Farmacia</span>
+      <p><strong>Dirección:</strong> Lavalle 2099, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541143754445">+54 11 4375-4445</a></p>
+      <p><strong>Horario:</strong> Lun–Vie 8:30 AM – 7:30 PM | Sáb 9:00 AM – 1:00 PM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 4.2 (314 reseñas)</p>
+      <p><strong>Descripción:</strong> Farmacia con medicamentos, productos de higiene y elaboración magistral.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Medicamentos y artículos de higiene a pocas cuadras del instituto.</p>
+      <p><a href="https://maps.google.com/?q=Lavalle+2099+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 11. Farmacia SEC Perón -->
+  <section data-role="page" id="pantallaFarmaciaSEC">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Farmacia SEC Perón</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">💊 Farmacia</span>
+      <p><strong>Dirección:</strong> Tte. Gral. Perón 2319, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541149512221">+54 11 4951-2221</a></p>
+      <p><strong>Horario:</strong> Lun–Vie 8:00 AM – 8:30 PM | Sáb 8:00 AM – 4:00 PM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 4.0 (239 reseñas)</p>
+      <p><strong>Descripción:</strong> Farmacia sindical con descuentos y horario amplio. Acepta Mercado Pago.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Buena opción por sus precios accesibles y descuentos.</p>
+      <p><a href="https://maps.google.com/?q=Peron+2319+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 12. Frutería La Ponderosa -->
+  <section data-role="page" id="pantallaPonderosa">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Frutería La Ponderosa</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🥦 Frutería / Verdulería</span>
+      <p><strong>Dirección:</strong> Ayacucho 423, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+541149515031">+54 11 4951-5031</a></p>
+      <p><strong>Horario:</strong> Lun–Sáb 8:00 AM – 8:00 PM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★★</span> 4.5 (114 reseñas)</p>
+      <p><strong>Descripción:</strong> Verdulería y frutería con productos frescos de calidad, muy reconocida en el barrio.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Para comprar frutas y snacks naturales durante los recreos.</p>
+      <p><a href="https://maps.google.com/?q=Ayacucho+423+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 13. Dietética Callao -->
+  <section data-role="page" id="pantallaCallao">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Dietética Callao</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🌿 Dietética / Naturista</span>
+      <p><strong>Dirección:</strong> Av. Callao 484, CABA</p>
+      <p><strong>Teléfono:</strong> No disponible</p>
+      <p><strong>Horario:</strong> Lun–Sáb 9:00 AM – 8:00 PM</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 3.9 (971 reseñas)</p>
+      <p><strong>Descripción:</strong> Amplia variedad de productos orgánicos, hierbas, especias, frutos secos y tés.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Snacks saludables e infusiones para estudiar.</p>
+      <p><a href="https://maps.google.com/?q=Callao+484+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 14. Heladería Sorrento -->
+  <section data-role="page" id="pantallaSorrento">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Heladería Sorrento</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🍦 Heladería</span>
+      <p><strong>Dirección:</strong> Av. Rivadavia 2051, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+5449537119">+54 4953-7119</a></p>
+      <p><strong>Horario:</strong> Todos los días 11:00 AM – 1:30 AM (Vie–Sáb hasta 2:30 AM)</p>
+      <p><strong>Calificación:</strong> <span class="estrellas">★★★★</span> 4.2 (653 reseñas)</p>
+      <p><strong>Descripción:</strong> Heladería y cafetería con amplia carta de sabores. Abierta hasta la madrugada.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Ideal después de clases nocturnas. A una cuadra sobre Rivadavia.</p>
+      <p><a href="https://maps.google.com/?q=Rivadavia+2051+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+  <!-- 15. Cajero Banco Nación -->
+  <section data-role="page" id="pantallaBanco">
+    <div data-role="header">
+      <a href="#idPantallaPrincipal" data-icon="back">Volver</a>
+      <h1>Cajero Banco Nación</h1>
+    </div>
+    <div data-role="content" class="detalle">
+      <span class="badge-rubro">🏧 Cajero Automático</span>
+      <p><strong>Dirección:</strong> Av. Corrientes 2156, CABA</p>
+      <p><strong>Teléfono:</strong> <a href="tel:+548106664444">0810-666-4444</a></p>
+      <p><strong>Horario:</strong> Abierto las 24 horas</p>
+      <p><strong>Descripción:</strong> Cajero automático del Banco de la Nación Argentina.</p>
+      <p><strong>Utilidad para estudiantes:</strong> Disponible en todo momento para extracciones y consultas.</p>
+      <p><a href="https://maps.google.com/?q=Corrientes+2156+CABA" target="_blank">🗺️ Ver en Google Maps</a></p>
+    </div>
+  </section>
+
+</body>
+</html>
