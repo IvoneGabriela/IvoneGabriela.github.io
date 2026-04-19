@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cancionero Digital</title>
+
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f2ec;
+    }
+
+    .ui-page {
+      background: linear-gradient(to bottom, #faf7f2, #efe4d8);
+    }
+
+    .ui-header,
+    .ui-footer {
+      background: #6b224a !important;
+      border: none !important;
+      color: white !important;
+      text-shadow: none !important;
+    }
+
+    .ui-header h1,
+    .ui-footer h4,
+    .ui-header a,
+    .ui-footer a {
+      color: white !important;
+      text-shadow: none !important;
+    }
+
+    .portada {
+      background: linear-gradient(135deg, #22396b, #b64583);
+      color: white;
+      padding: 28px 18px;
+      text-align: center;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+    }
+
+    .portada h2 {
+      margin: 0 0 10px;
+      font-size: 30px;
+    }
+
+    .portada p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .bloque {
+      background: rgb(255, 255, 255);
+      margin: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .bloque h3 {
+      margin-top: 0;
+      color: #6b2247;
+      font-size: 18px;
+    }
+
+    .etiqueta {
+      display: inline-block;
+      background: #f1dfcf;
+      color: #6b223a;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin: 4px 6px 4px 0;
+    }
+
+    .buscador {
+      margin: 14px;
+    }
+
+    .ui-input-text,
+    .ui-input-search {
+      border-radius: 14px !important;
+      border: 1px solid #dac8b6 !important;
+      box-shadow: none !important;
+    }
+
+    .ui-input-search input,
+    .ui-input-text input {
+      font-size: 15px !important;
+    }
+
+    .ui-listview > li a {
+      min-height: 70px !important;
+      padding-top: 12px !important;
+      padding-bottom: 12px !important;
+    }
+
+    .ui-listview .ui-btn h2 {
+      color: #4f2e19 !important;
+      font-size: 18px !important;
+      margin-top: 0 !important;
+    }
+
+    .ui-listview .ui-btn p {
+      color: #6f6f6f !important;
+      font-size: 14px !important;
+      margin-top: 6px !important;
+    }
+
+    .hero-cancion {
+      height: 220px;
+      border-radius: 0 0 24px 24px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+      background: #d9c2ad;
+    }
+
+    .hero-cancion img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-texto {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 20px 16px 14px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.72));
+      color: white;
+    }
+
+    .hero-texto h2 {
+      margin: 0 0 4px;
+      font-size: 26px;
+    }
+
+    .hero-texto p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .dato {
+      font-size: 15px;
+      margin: 8px 0;
+    }
+
+    .letra {
+      white-space: pre-line;
+      line-height: 1.8;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .nota {
+      background: #f6ede4;
+      border-left: 4px solid #b67845;
+      padding: 12px;
+      border-radius: 10px;
+      color: #5a4638;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .boton-enlace {
+      display: block;
+      background: #6b3f22 !important;
+      color: white !important;
+      text-align: center;
+      padding: 12px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .mini {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+      margin: 6px 0;
+    }
+  </style>
+</head>
+<body>
+
+<section data-role="page" id="inicio">
+  <div data-role="header" data-position="fixed">
+    <h1>Cancionero Digital</h1>
+  </div>
+
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="portada">
+      <h2>Cancionero</h2>
+      <p>Buscador y enlaces.</p>
+    </div>
+
+    <div class="bloque">
+      <h3>Estilos incluidos</h3>
+      <span class="etiqueta">Litúrgico</span>
+      <span class="etiqueta">Pop</span>
+      <span class="etiqueta">Rock</span>
+      <span class="etiqueta">Punk</span>
+      <span class="etiqueta">Lentos 90s</span>
+      <span class="etiqueta">Canción social</span>
+      <span class="etiqueta">Folklore</span>
+      <span class="etiqueta">Reguetón</span>
+    </div>
+
+    <div class="buscador">
+      <input type="text" id="buscar" placeholder="Buscar canción, artista o estilo...">
+    </div>
+
+    <ul data-role="listview" data-inset="true" id="listaCanciones">
+      <li data-texto="pescador de hombres cesareo gabarain liturgico comunion"><a href="#c1"><h2>Pescador de Hombres</h2><p>Cesáreo Gabaráin · Litúrgico</p></a></li>
+      <li data-texto="solo le pido a dios leon gieco mercedes sosa cancion social"><a href="#c2"><h2>Sólo le pido a Dios</h2><p>León Gieco / Mercedes Sosa · Canción social</p></a></li>
+      <li data-texto="color esperanza diego torres pop"><a href="#c3"><h2>Color Esperanza</h2><p>Diego Torres · Pop</p></a></li>
+      <li data-texto="zamba de mi esperanza folklore"><a href="#c4"><h2>Zamba de mi Esperanza</h2><p>Folklore · Zamba</p></a></li>
+      <li data-texto="like a prayer madonna pop numero uno"><a href="#c5"><h2>Like a Prayer</h2><p>Madonna · Pop</p></a></li>
+      <li data-texto="material girl madonna pop numero uno"><a href="#c6"><h2>Material Girl</h2><p>Madonna · Pop</p></a></li>
+      <li data-texto="it must have been love roxette lentos 90"><a href="#c7"><h2>It Must Have Been Love</h2><p>Roxette · Lento de los 90</p></a></li>
+      <li data-texto="listen to your heart roxette lentos 90"><a href="#c8"><h2>Listen to Your Heart</h2><p>Roxette · Lento de los 90</p></a></li>
+      <li data-texto="blitzkrieg bop ramones punk"><a href="#c9"><h2>Blitzkrieg Bop</h2><p>Ramones · Punk</p></a></li>
+      <li data-texto="i wanna be sedated ramones punk"><a href="#c10"><h2>I Wanna Be Sedated</h2><p>Ramones · Punk</p></a></li>
+      <li data-texto="anarchy in the uk sex pistols punk"><a href="#c11"><h2>Anarchy in the U.K.</h2><p>Sex Pistols · Punk</p></a></li>
+      <li data-texto="god save the queen sex pistols punk"><a href="#c12"><h2>God Save the Queen</h2><p>Sex Pistols · Punk</p></a></li>
+      <li data-texto="de musica ligera soda stereo rock"><a href="#c13"><h2>De Música Ligera</h2><p>Soda Stereo · Rock</p></a></li>
+      <li data-texto="persiana americana soda stereo rock"><a href="#c14"><h2>Persiana Americana</h2><p>Soda Stereo · Rock</p></a></li>
+      <li data-texto="somos de calle daddy yankee regueton"><a href="#c15"><h2>Somos de calle</h2><p>Daddy Yankee · Reguetón</p></a></li>
+    </ul>
+  </div>
+
+  <div data-role="footer" data-position="fixed">
+    <h4>Gabriela Roldan</h4>
+  </div>
+</section>
+
+<!-- Plantilla repetida por canción -->
+<section data-role="page" id="c1">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Pescador de Hombres</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=900&q=80" alt="Pescador de Hombres"><div class="hero-texto"><h2>Pescador de Hombres</h2><p>Cesáreo Gabaráin · Litúrgico</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Litúrgico / Comunión</p><p class="dato"><strong>Autor:</strong> Cesáreo Gabaráin</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Tú
+Has venido a la orilla
+No has buscado
+Ni a sabios ni a ricos
+Tan solo quieres
+Que yo te siga
+Señor, me has mirado a los ojos
+Sonriendo, has dicho mi nombre
+En la arena, he dejado mi barca
+Junto a ti, buscaré otro mar
+Tú
+Sabes bien lo que tengo
+En mi barca
+No hay oro ni espadas
+Tan solo redes
+Y mi trabajo
+Señor, me has mirado a los ojos
+Sonriendo, has dicho mi nombre
+En la arena, he dejado mi barca
+Junto a ti, buscaré otro mar
+Tú
+Necesitas mis manos
+Mi cansancio
+Que a otros descanse
+Amor que quiera
+Seguir amando
+Señor, me has mirado a los ojos
+Sonriendo, has dicho mi nombre
+En la arena, he dejado mi barca
+Junto a ti, (Junto a ti)
+Buscaré otro mar (otro mar)
+Tú
+Pescador de otros lagos
+Ansia entera de almas que esperan
+Amigo bueno que así me llamas
+Señor, (Señor)
+Me has mirado a los ojos (me has mirado a los ojos)
+Sonriendo, has dicho mi nombre
+En la arena (en la arena)
+He dejado mi barca (he dejado mi barca)
+Junto a ti, (junto a ti)
+Buscaré otro mar
+Señor, me has mirado a los ojos
+Sonriendo, has dicho mi nombre
+En la arena, he dejado mi barca
+Junto a ti, buscaré otro mar</div><a class="boton-enlace" href="https://www.youtube.com/watch?v=m0WwrQsCiN0&list=RDm0WwrQsCiN0&start_radio=1" target="_blank">Escuchar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c2">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Sólo le pido a Dios</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=900&q=80" alt="Sólo le pido a Dios"><div class="hero-texto"><h2>Sólo le pido a Dios</h2><p>León Gieco / Mercedes Sosa · Canción social</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Canción social</p><p class="dato"><strong>Autor:</strong> León Gieco</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Solo le pido a Dios
+Que el dolor no me sea indiferente
+Que la reseca muerte no me encuentre
+Vacío y solo, sin haber hecho lo suficiente
+Solo le pido a Dios
+Que lo injusto no me sea indiferente
+Que no me abofeteen la otra mejilla
+Después de que una garra me arañó esta suerte
+Solo le pido a Dios
+Que la guerra no me sea indiferente
+Es un monstruo grande y pisa fuerte
+Toda la pobre inocencia de la gente
+Es un monstruo grande y pisa fuerte
+Toda la pobre inocencia de la gente
+Solo le pido a Dios
+Que el engaño no me sea indiferente
+Si un traidor puede más que unos cuantos
+Que esos cuantos no lo olviden fácilmente
+Solo le pido a Dios
+Que el futuro no me sea indiferente
+Desahuciado está el que tiene que marchar
+A vivir una cultura diferente
+Solo le pido a Dios
+Que la guerra no me sea indiferente
+Es un monstruo grande y pisa fuerte
+Toda la pobre inocencia de la gente
+Es un monstruo grande y pisa fuerte
+Toda la pobre inocencia de la gente</div><a class="boton-enlace" href="https://www.youtube.com/watch?v=vzQIwFPyEc4" target="_blank">Escuchar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c3">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Color Esperanza</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" alt="Color Esperanza"><div class="hero-texto"><h2>Color Esperanza</h2><p>Diego Torres · Pop</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Pop</p><p class="dato"><strong>Artista:</strong> Diego Torres</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Sé qué hay en tus ojos con solo mirar
+Que estás cansado de andar y de andar
+Y caminar girando siempre en un lugar
+Sé que las ventanas se pueden abrir
+Cambiar el aire depende de ti
+Ay, te ayudará
+Vale la pena una vez más
+Saber que se puede
+Querer que se pueda
+Quitarnos los miedos, dejarlos afuera
+Pintarse la cara color esperanza
+Tentar al futuro con el corazón
+Vale más el presente que el futuro
+Dale suave que aquí no hay apuro
+Ya salimo adelante, ya no le des mente
+Y abrazo pa toda mi gente
+É melhor perderse que nunca embarcar
+Mejor tentarse a dejar de intentar
+Y así será (y así será)
+E a vida muda, mudará
+Sé que lo imposible se puede lograr
+Que la tristeza algún día se irá
+Y así será (yeah, yeah, y así será)
+La vida cambia y cambiará
+Sentirás que el alma vuela
+Por cantar una vez más
+Saber que se puede
+Querer que se pueda (aire, aire)
+Quitarse los miedos
+Echarlos pa afuera
+Pintarse la cara color esperanza
+Tentar al futuro con el corazón
+Con el corazón
+Saber que se puede
+Querer que se pueda
+Quitarse los miedos
+Sacarlos afuera
+Pintarse la cara color esperanza
+Tentar al futuro con el corazón
+Saber que se puede
+Querer que se pueda
+Quitarse los miedos
+Sacarlos afuera
+Pintarse la cara color esperanza
+Tentar el futuro con el corazón
+Saber que se puede (que sí se puede, se puede)
+Querer que se pueda (yo quiero, yo quiero que sí se pueda)
+Pintarse la cara color esperanza
+Tentar al futuro con el corazón
+Saber que se puede (claro que se puede)
+Querer que se pueda (ya ves, que se pueda)
+Pintarse la cara color esperanza (color esperanza)
+Tentar al futuro con el corazón</div><a class="boton-enlace" href="https://www.youtube.com/watch?v=Nb1VOQRs-Vs" target="_blank">Escuchar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c4">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Zamba de mi Esperanza</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80" alt="Zamba de mi Esperanza"><div class="hero-texto"><h2>Zamba de mi Esperanza</h2><p>Folklore · Zamba</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Folklore</p><p class="dato"><strong>Subgénero:</strong> Zamba</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Zamba de mi esperanza
+Amanecida como un querer
+Sueño, sueño del alma
+Que a veces muere sin florecer
+Sueño, sueño del alma
+Que a veces muere sin florecer
+Zamba, a ti te canto
+Porque tu canto derrama amor
+Caricias de tu pañuelo
+Que va envolviendo mi corazón
+Caricias de tu pañuelo
+Que va envolviendo mi corazón
+Estrella, tu que miraste
+Tu que escuchaste mi parecer
+Estrella, deja que cante
+Deja que quiera como yo sé
+Estrella, deja que cante
+Deja que quiera como yo sé
+La dicha muere en tristeza
+El llanto en la alegría
+Pero mi amor por ti no morirá jamás
+Pero mi amor por ti no morirá
+Pero mi amor por ti no morirá jamás
+No morirá jamás, jamás
+Lo malo muere en lo bueno
+La flor por tu amor muere
+Pero mi amor por ti no morirá jamás
+Pero mi amor por ti no morirá
+Pero mi amor por ti no morirá jamás
+No morirá jamás, jamás
+Porque tu eres en mi vida la esperanza
+Me has brindado todo un cielo de bondad
+Porque tanto, tanto que te quiero
+Ay mi amor por ti no morirá jamás
+Pero mi amor por ti no morirá jamás
+No morirá jamás, jamás</div><a class="boton-enlace" href="https://www.youtube.com/watch?v=Pu3I1RJzDy8" target="_blank">Escuchar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c5">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Like a Prayer</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80" alt="Like a Prayer"><div class="hero-texto"><h2>Like a Prayer</h2><p>Madonna · Pop</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Pop</p><p class="dato"><strong>Artista:</strong> Madonna</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Life is a mystery
+Everyone must stand alone
+I hear you call my name
+And it feels like home
+When you call my name, it's like a little prayer
+I'm down on my knees, I wanna take you there
+In the midnight hour, I can feel your power
+Just like a prayer, you know I'll take you there
+I hear your voice
+It's like an angel sighing
+I have no choice, I hear your voice
+Feels like flying
+I close my eyes
+Oh God, I think I'm falling
+Out of the sky, I close my eyes
+Heaven, help me
+When you call my name, it's like a little prayer
+I'm down on my knees, I wanna take you there
+In the midnight hour, I can feel your power
+Just like a prayer, you know I'll take you there
+Like a child
+You whisper softly to me
+You're in control just like a child
+Now I'm dancing
+It's like a dream
+No end and no beginning
+You're here with me it's like a dream
+Let the choir sing
+When you call my name, it's like a little prayer
+I'm down on my knees, I wanna take you there
+In the midnight hour, I can feel your power
+Just like a prayer, you know I'll take you there
+When you call my name, it's like a little prayer
+I'm down on my knees, I wanna take you there
+In the midnight hour, I can feel your power
+Just like a prayer, you know I'll take you there
+Life is a mystery
+Everyone must stand alone
+I hear you call my name
+And it feels like home
+Just like a prayer, your voice can take me there
+Just like a muse to me, you are a mystery
+Just like a dream, you are not what you seem
+Just like a prayer, no choice, your voice can take me there
+Just like a prayer, I'll take you there
+It's like a dream to me
+Just like a prayer, I'll take you there (I'll take you there)
+It's like a dream to me (oh-oh, yeah)
+Just like a prayer, I'll take you there (oh, I'll take you there)
+It's like a dream to me (oh no, oh yeah-yeah-yeah)
+Just like a prayer, I'll take you there (oh yeah-yeah)
+It's like a dream to me (oh-oh, oh no)
+Just like a prayer, your voice can take me there (just like a prayer)
+Just like a muse to me, you are a mystery (your voice can take me there)
+Just like a dream, you are not what you seem (just like a prayer)
+Just like a prayer, no choice, your voice can take me there
+Just like a prayer, your voice can take me there (just like a prayer)
+Just like a muse to me, you are a mystery (your voice can take me there)
+Just like a dream, you are not what you seem (just like a prayer)
+Just like a prayer, no choice, your voice can take me there
+Your voice can take me there
+Like a prayer (just like a prayer)
+Just like a prayer, your voice can take me there
+Just like a prayer
+Just like a prayer, your voice can take me there
+Just like a prayer</div><a class="boton-enlace" href="https://www.youtube.com/watch?v=79fzeNUqQbQ" target="_blank">Escuchar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c6">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Material Girl</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=900&q=80" alt="Material Girl"><div class="hero-texto"><h2>Material Girl</h2><p>Madonna · Pop</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Pop</p><p class="dato"><strong>Artista:</strong> Madonna</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Some boys kiss me, some boys hug me
+I think they're okay
+If they don't give me proper credit
+I just walk away
+They can beg and they can plead
+But they can't see the light, that's right
+'Cause the boy with the cold hard cash
+Is always Mister Right
+'Cause we are living in a material world
+And I am a material girl
+You know that we are living in a material world
+And I am a material girl
+Some boys romance, some boys slow dance
+That's alright with me
+If they can't raise my interest then I
+Have to let them be
+Some boys try and some boys lie but
+I don't let them play, no way
+Only boys that save their pennies
+Make my rainy day
+'Cause they are living in a material world
+And I am a material girl
+You know that we are living in a material world
+And I am a material girl
+Living in a material world
+And I am a material girl
+You know that we are living in a material world
+And I am a material girl
+Living in a material world
+(Material)
+Living in a material world
+Living in a material world
+(Material)
+Living in a material world
+Boys may come and boys may go
+And that's alright you see
+Experience has made me rich
+And now they're after me
+'Cause everybody's living in a material world
+And I am a material girl
+You know that we are living in a material world
+And I am a material girl
+Living in a material world
+And I am a material girl
+You know that we are living in a material world
+And I am a material girl
+A material, a material
+A material, a material world</div><a class="boton-enlace" href="https://www.youtube.com/results?search_query=Madonna+Material+Girl+official+video" target="_blank">Buscar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c7">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>It Must Have Been Love</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?auto=format&fit=crop&w=900&q=80" alt="It Must Have Been Love"><div class="hero-texto"><h2>It Must Have Been Love</h2><p>Roxette · Lento de los 90</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Lento de los 90</p><p class="dato"><strong>Artista:</strong> Roxette</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">It must have been love
+But it's over now
+Lay a whisper
+On my pillow
+Leave the winter
+On the ground
+I wake up lonely
+There's air of silence
+In the bedroom
+And all around
+Touch me now
+I close my eyes
+And dream away
+It must have been love
+But it's over now
+It must have been good
+But I lost it somehow
+It must have been love
+But it's over now
+From the moment we touched
+Till the time had run out
+Make believing
+We're together
+That I'm sheltered
+By your heart
+But in and outside
+I turned to water
+Like a teardrop
+In your palm
+And it's a hard
+Winter's day
+I dream away
+It must have been love
+But it's over now
+It was all that I wanted
+Now, I'm living without
+It must have been love
+But it's over now
+It's where the water flows
+It's where the wind blows
+It must have been love
+But it's over now
+It must have been good
+But I lost it somehow
+It must have been love
+But it's over now
+From the moment we touched
+Till the time had run out
+Yeah, it must have been love
+But it's over now
+It was all that I wanted
+Now, I'm living without
+It must have been love
+But it's over now
+It's where the water flows
+It's where the wind blows
+It must have been love
+But it's over now
+It must have been love
+But it's over now</div><a class="boton-enlace" href="https://www.youtube.com/watch?v=k2C5TjS2sh4" target="_blank">Escuchar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c8">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Listen to Your Heart</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1487215078519-e21cc028cb29?auto=format&fit=crop&w=900&q=80" alt="Listen to Your Heart"><div class="hero-texto"><h2>Listen to Your Heart</h2><p>Roxette · Lento de los 90</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Balada pop</p><p class="dato"><strong>Artista:</strong> Roxette</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Sé que hay algo tras tu sonrisa
+I know there's something in the wake of your smile
+Tengo una idea por la mirada en tus ojos, sí
+I get a notion from the look in your eyes, yeah
+Has creado un amor
+You've built a love
+Pero ese amor se desmorona
+But that love falls apart
+Tu pedacito de cielo
+Your little piece of heaven
+Se vuelve oscuro
+Turns to dark
+Escucha a tu corazón
+Listen to your heart
+Cuando te está llamando
+When he's calling for you
+Escucha a tu corazón
+Listen to your heart
+No hay nada más que puedas hacer
+There's nothing else you can do
+No sé a dónde vas
+I don't know where you're going
+Y no sé porqué
+And I don't know why
+Pero escucha tu corazón
+But listen to your heart
+Antes de que le digas adiós
+Before you tell him goodbye
+A veces te preguntas si esta pelea vale la pena
+Sometimes you wonder if this fight is worthwhile
+Los preciosos momentos se pierden en la marea, sí
+The precious moments are all lost in the tide, yeah
+Son arrastrados y nada es lo que parece
+They're swept away and nothing is what it seems
+El sentimiento de pertenecer
+The feeling of belonging
+A tus sueños
+To your dreams
+Escucha a tu corazón
+Listen to your heart
+Cuando él te llama
+When he's calling for you
+Escucha a tu corazón
+Listen to your heart
+No hay nada más que puedas hacer
+There's nothing else you can do
+No sé a dónde vas
+I don't know where you're going
+Y no sé porqué
+And I don't know why
+Pero escucha tu corazón
+But listen to your heart
+Antes de que le digas adiós
+Before you tell him goodbye
+Y hay voces que quieren ser escuchadas
+And there are voices that want to be heard
+Tanto que mencionar, pero no puedes encontrar las palabras
+So much to mention, but you can't find the words
+El aroma de la magia, la belleza que ha sido (la belleza que ha sido)
+The scent of magic, the beauty that's been (the beauty that's been)
+Cuando el amor era más salvaje que el viento
+When love was wilder than the wind
+Escucha a tu corazón (escúchalo)
+Listen to your heart (take a listen to it)
+Cuando él te llama
+When he's calling for you
+Escucha a tu corazón (escúchalo)
+Listen to your heart (take a listen to it)
+Aquí no hay nada más que puedas hacer
+Here's nothing else you can do
+No sé a dónde vas
+I don't know where you're going
+Y no sé porqué
+And I don't know why
+Pero escucha tu corazón
+But listen to your heart
+Antes de que le digas adiós
+Before, oh
+Escucha a tu corazón (escúchalo)
+Listen to your heart (take a listen to it)
+Cuando él te llama
+When he's calling for you
+Escucha a tu corazón (escúchalo)
+Listen to your heart (take a listen to it)
+No hay nada más que puedas hacer
+There's nothing else you can do
+No sé a dónde vas
+I don't know where you're going
+Y no sé porqué
+And I don't know why
+Pero escucha tu corazón
+But listen to your heart
+Antes de que le digas adiós
+Before you tell him goodbye
+(Escucha a tu corazón)
+(Listen to your heart)
+(Escucha a tu corazón) ¡oh, escúchalo, corazón!
+(Listen to your heart) oh, take a listen to it, heart!
+(Escucha a tu corazón)
+(Listen to your heart)
+Tómalo, escúchalo
+Take it, take a listen to it
+¡Sí!
+Yeah!
+(Escucha a tu corazón)
+(Listen to your heart)
+(Escucha a tu corazón)
+(Listen to your heart)
+(Escucha a tu corazón)
+(Listen to your heart)
+¡Corazón! ¡Corazón!
+Heart! Heart!
+</div><a class="boton-enlace" href="https://www.youtube.com/watch?v=yCC_b5WHLX0" target="_blank">Escuchar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c9">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Blitzkrieg Bop</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1501612780327-45045538702b?auto=format&fit=crop&w=900&q=80" alt="Blitzkrieg Bop"><div class="hero-texto"><h2>Blitzkrieg Bop</h2><p>Ramones · Punk</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Punk</p><p class="dato"><strong>Artista:</strong> Ramones</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">It's good to be back in England
+And it's good to see all y'all again
+Take it through
+Hey ho, let's go
+Hey ho, let's go
+Hey ho, let's go
+Hey ho, let's go
+They're forming in a straight line
+They're going through a tight wind
+The kids are losing their minds
+Blitzkrieg Bop
+They're piling in the back seat
+They generate steam heat
+Pulsatin' to the back beat
+Blitzkrieg Bop
+Hey ho, let's go
+Shoot them in the back now
+What they want, I don't know
+They're all revved up and ready to go
+They're forming in a straight line
+They're going through a tight wind
+The kids are losing their minds
+Blitzkrieg Bop
+They're piling in the back seat
+They generate steam heat
+Pulsatin' to the back beat
+Blitzkrieg Bop
+Hey ho, let's go
+Shoot them in the back now
+What they want, I don't know
+They're all revved up and ready to go
+They're forming in a straight line
+They're going through a tight wind
+The kids are losing their minds
+Blitzkrieg Bop
+They're piling in the back seat
+They generate steam heat
+Pulsatin' to the back beat
+Blitzkrieg Bop
+Hey ho, let's go
+Hey ho, let's go
+Hey ho, let's go
+Hey ho, let's go</div><a class="boton-enlace" href="https://www.youtube.com/watch?v=268C3N2dDYk" target="_blank">Escuchar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c10">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>I Wanna Be Sedated</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=900&q=80" alt="I Wanna Be Sedated"><div class="hero-texto"><h2>I Wanna Be Sedated</h2><p>Ramones · Punk</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Punk</p><p class="dato"><strong>Artista:</strong> Ramones</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">20, 20, 24 hours to go
+I wanna be sedated
+Nothing to do, nowhere to go
+I wanna be sedated
+Just get me to the airport, put me on a plane
+Hurry, hurry, hurry before I go insane
+I can't control my fingers, I can't control my brain
+Oh, no, oh-oh, oh-oh
+20, 20, 24 hours to go
+I wanna be sedated
+Nothing to do, nowhere to go
+I wanna be sedated
+Just put me in a wheelchair, get me on a plane
+Hurry, hurry, hurry before I go insane
+I can't control my fingers, I can't control my brain
+Oh, no, oh-oh, oh-oh
+20, 20, 24 hours to go
+I wanna be sedated
+Nothing to do, nowhere to go
+I wanna be sedated
+Just put me in a wheelchair, get me to the show
+Hurry, hurry, hurry, before I go loco
+I can't control my fingers, I can't control my toes
+Oh, no, oh-oh, oh-oh
+20, 20, 24 hours to go
+I wanna be sedated
+Nothing to do, nowhere to go
+I wanna be sedated
+Just put me in a wheelchair, get me to the show
+Hurry, hurry, hurry, before I go loco
+I can't control my fingers, I can't control my toes
+Oh, no, oh-oh, oh-oh
+Bam-bam, ba-bam, ba-bam, bam, ba-bam
+I wanna be sedated
+Bam-bam, ba-bam, ba-bam, bam, ba-bam
+I wanna be sedated
+Bam-bam, ba-bam, ba-bam, bam, ba-bam
+I wanna be sedated
+Bam-bam, ba-bam, ba-bam, bam, ba-bam
+I wanna be sedated</div><a class="boton-enlace" href="https://www.youtube.com/results?search_query=Ramones+I+Wanna+Be+Sedated+official+video" target="_blank">Buscar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c11">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Anarchy in the U.K.</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?auto=format&fit=crop&w=900&q=80" alt="Anarchy in the U.K."><div class="hero-texto"><h2>Anarchy in the U.K.</h2><p>Sex Pistols · Punk</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Punk</p><p class="dato"><strong>Artista:</strong> Sex Pistols</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Right now
+I am an antichrist
+And I am an anarchist
+Don't know what I want
+But I know how to get it
+I wanna destroy the passerby
+'Cause I wanna be Anarchy
+No dog's body.
+Anarchy for the U.K.
+It's coming sometime and maybe.
+I give a wrong time, stop a traffic line.
+Your future dream is a shopping scheme.
+'Cause I
+I wanna be Anarchy
+In this city.
+How many ways to get what you want
+I use the best
+I use the rest.
+I use the enemy
+I use anarchy.
+'Cause I wanna be Anarchy.
+It's the only way to be.
+Is this the M.P.L.A. or
+Is this the U.D.A. or
+Is this the I.R.A.?
+I thought it was the U.K.
+Or just another country
+Another council tenacy
+I wanna be Anarchy.
+And I wanna be Anarchy.
+Oh what a name
+And I wanna be an anarchist
+Get pissed Destroy!</div><a class="boton-enlace" href="https://www.youtube.com/watch?v=cBojbjoMttI" target="_blank">Escuchar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c12">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>God Save the Queen</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?auto=format&fit=crop&w=900&q=80" alt="God Save the Queen"><div class="hero-texto"><h2>God Save the Queen</h2><p>Sex Pistols · Punk</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Punk</p><p class="dato"><strong>Artista:</strong> Sex Pistols</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Dios salve a la Reina
+el régimen fascista
+te ha convertido en una imbécil
+bomba H potencial
+Dios salve a la Reina
+Ella no es un ser humano
+no hay futuro
+en el sueño de Inglaterra
+
+Que no te digan lo que quieres querer
+y que no te digan lo que quieres necesitar
+No hay futuro, no hay futuro
+no hay futuro para ti
+
+Dios salve a la Reina
+lo decimos en serio, hombre
+Amamos a nuestra Reina
+Dios salve
+
+Dios salve a la Reina
+porque los turistas son dinero
+y nuestro mascarón de proa
+no es lo que parece
+Oh, Dios salve la historia
+Dios salve tu desfile de locos
+Oh, Señor, Dios ten piedad
+todos los crímenes se pagan
+
+Cuando no hay futuro ¿cómo puede haber pecado?
+Somos las flores en el cubo de la basura
+somos el veneno en tu máquina humana
+somos el futuro, tu futuro
+
+Dios salve a la Reina
+lo decimos en serio, hombre
+Amamos a nuestra Reina
+Dios salva
+
+Dios salve a la Reina
+lo decimos en serio, hombre
+y no hay futuro
+en el sueño de Inglaterra
+
+No hay futuro
+No hay futuro
+No hay futuro para ti
+No hay futuro
+No hay futuro
+No hay futuro para mí
+No hay futuro
+No hay futuro
+No hay futuro para ti
+No hay futuro
+No hay futuro para ti</div><a class="boton-enlace" href="https://www.youtube.com/results?search_query=Sex+Pistols+God+Save+the+Queen+official+video" target="_blank">Buscar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c13">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>De Música Ligera</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80" alt="De Música Ligera"><div class="hero-texto"><h2>De Música Ligera</h2><p>Soda Stereo · Rock</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Rock</p><p class="dato"><strong>Artista:</strong> Soda Stereo</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Ella durmió
+Al calor de las masas
+Y yo desperté
+Queriendo soñarla
+Algún tiempo atrás
+Pensé en escribirle
+Que nunca sortié
+Las trampas del amor
+De aquél amor
+De música ligera
+Nada nos libra
+Nada más queda
+No le enviaré
+Cenizas de rosas
+Ni pienso evitar
+Un roce secreto
+De aquél amor
+De música ligera
+Nada nos libra
+Nada más queda
+Uh-uh-uh-uh-uh-uh-uh
+De aquél amor
+De música ligera
+Nada nos libra
+Nada más queda
+Nada más
+Nada más queda
+Nada más queda
+Nada más queda
+Nada más queda.</div><a class="boton-enlace" href="https://www.youtube.com/results?search_query=Soda+Stereo+De+Musica+Ligera+official+video" target="_blank">Buscar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c14">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Persiana Americana</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80" alt="Persiana Americana"><div class="hero-texto"><h2>Persiana Americana</h2><p>Soda Stereo · Rock</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Rock</p><p class="dato"><strong>Artista:</strong> Soda Stereo</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Te prefiero fuera de foco
+Inalcanzable
+Yo te prefiero irreversible
+Casi intocable
+Tus ropas caen lentamente
+Soy un espía, un espectador
+Y el ventilador desgarrándote
+Sé que te excita pensar
+Hasta dónde llegaré
+Es difícil de creer
+Creo que nunca lo podré saber
+Solo así yo te veré
+A través de mi persiana americana
+Es una condena agradable
+El instante previo
+Es como un desgaste, una necesidad
+Más que un deseo
+Estamos al borde de la cornisa
+Casi a punto de caer
+No sientes miedo, sigues sonriendo
+Sé que te excita pensar
+Hasta dónde llegaré
+Difícil de creer
+Creo que nunca lo podré saber
+Solo así yo te veré
+A través de mi persiana americana
+Tus ropas caen lentamente
+Soy un espía, un espectador
+Y el ventilador desgarrándote
+Sé que te excita pensar
+Hasta dónde llegaré
+Es difícil de creer
+Creo que nunca lo podré saber
+Solo así yo te veré
+A través de mi persiana americana
+Lo que pueda suceder
+No gastes fuerzas para comprender
+Solo así yo te veré
+A través de mi persiana americana
+Difícil de creer (de creer)
+Creo que nunca lo podré saber
+Solo así (solo así) yo te veré (yo te veré)
+A través de mi persiana americana
+Difícil, difícil de creer (difícil de creer)
+Creo que nunca lo podré saber
+Solo así yo te veré
+A través de mi persiana americana
+Solo así yo te veré
+A través de mi persiana americana</div><a class="boton-enlace" href="https://www.youtube.com/results?search_query=Soda+Stereo+Persiana+Americana+official+video" target="_blank">Buscar en YouTube</a></div>
+  </div>
+</section>
+
+<section data-role="page" id="c15">
+  <div data-role="header" data-position="fixed"><a href="#inicio" data-icon="back">Volver</a><h1>Somos de Calle</h1></div>
+  <div role="main" class="ui-content" style="padding:0;">
+    <div class="hero-cancion"><img src="https://images.unsplash.com/photo-1499364615650-ec38552f4f34?auto=format&fit=crop&w=900&q=80" alt="Gasolina"><div class="hero-texto"><h2>Gasolina</h2><p>Daddy Yankee · Reguetón</p></div></div>
+    <div class="bloque"><h3>Ficha</h3><p class="dato"><strong>Estilo:</strong> Reguetón</p><p class="dato"><strong>Artista:</strong> Daddy Yankee</p></div>
+    <div class="bloque"><h3>Letra</h3><div class="letra">Tú sabes que somos de calle
+Hay cría y corazón siente el fuego
+Las reglas del juego las pongo yo
+Porque somos de calle
+Hay cría y corazón, siente el fuego
+Las reglas del juego las pongo yo
+Brega legal o nos vamos a lo ilegal
+Este negocio pa', no lo cojas personal
+Y yo sé que hoy día estas aquí, mi pana
+Y no sé si fue el dragón esta mañana
+¿Qué es lo que quiere?, Yo sé que tú quiere
+Dinero, dinero es lo que to' el mundo quiere
+So' glotón, verá' tu final por la ambición
+La ambición es el primer paso a la traición
+Sí señor, por eso es que lo revientan
+Pues no puedes morder la mano que te alimenta
+De aquí no puedes romper la palabra de hombre
+Pues con tu vida puede ser que a ti te la cobren
+No dañé tu récord, pa', con un anormal
+Las leyes de la calle no son las del tribunal
+Aquí los jueces dictan la sentencia con fuego
+En duelos donde no existe el arreglo ni el consuelo
+Tú sabes que somos de calle
+Hay cría y corazón siente el fuego
+Las reglas, del fuego las pongo yo
+Porque somos de calle
+Hay cría y corazón, siente el fuego
+Las reglas del juego las pongo yo
+Hay quien nace pa' líder, otro pa' seguidor
+El segundo es tu gran admirador
+Pasa el tiempo y te exigen posiciones
+Le enseña algo y te quieren dar instrucciones
+Brinca cuica serruchador
+Se te olvidó cuando me pedías un favor
+No te estoy sacando en cara lo que por ti hice
+Te estoy acordando pa' que usted no sirve
+Pase lo que pase, a nadie le doy la espalda
+Ni traiciono un hermano o socio por una falda
+Se envuelve en estupideces y te fallan
+Se creen que se lo merecen y se engañan
+Y en la calle, te lo comía vivo
+El fiscal te metió presión con este homicidio
+Terminaste sentado en la silla 'e los testigos
+Vaya, qué lindo nombre le pusiste al caserío
+Tú sabes que somos de calle
+Hay cría y corazón siente el fuego
+Las reglas del juego las pongo yo
+Porque somos de calle
+Hay cría y corazón siente el fuego
+Las reglas del juego las pongo yo. </div><a class="boton-enlace" href="https://www.youtube.com/watch?v=HMRyk9TrlU4&list=RDHMRyk9TrlU4&start_radio=1" target="_blank">Buscar en YouTube</a></div>
+  </div>
+</section>
+
+<script>
+  $(document).on("pagecreate", "#inicio", function () {
+    $("#buscar").on("keyup", function () {
+      var valor = $(this).val().toLowerCase();
+
+      $("#listaCanciones li").each(function () {
+        var texto = ($(this).attr("data-texto") || "").toLowerCase();
+        if (texto.indexOf(valor) > -1) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+
+      $("#listaCanciones").listview("refresh");
+    });
+  });
+</script>
+
+</body>
+</html>
