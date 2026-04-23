@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi App</title>
+  <title>Mi Chat Bot</title>
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
@@ -19,8 +19,8 @@
     }
     .ui-header h1 {
       color: #ffffff !important;
-      font-size: 20px;
-      line-height: 60px;
+      font-size: 22px;
+      margin: 0;
     }
     .ui-footer {
       background-color: #0077cc !important;
@@ -33,24 +33,64 @@
     }
     .ui-footer h4 {
       color: #ffffff !important;
-      font-size: 14px;
+      font-size: 13px;
       margin: 0;
     }
     .ui-content {
-      padding: 20px;
+      padding: 15px;
       text-align: center;
+      background: #f5f5f5;
     }
 
+    /* Asistente */
+    #idAsistente {
+      font-size: 60px;
+      margin: 10px 0 0;
+      animation: flotar 2s ease-in-out infinite;
+    }
+    @keyframes flotar {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+    #idBurbuja {
+      background: white;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin: 8px auto;
+      max-width: 90%;
+      font-size: 16px;
+      color: #333;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      min-height: 40px;
+    }
+
+    /* Caja que cambia de color */
+    #colorear {
+      height: 120px;
+      background-color: #0077cc;
+      border-radius: 12px;
+      margin: 10px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      transition: background 0.5s ease;
+    }
+
+    /* Buscador */
     #idAreaChat {
       background: teal;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
-      margin-bottom: 15px;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 10px;
     }
-    #idAreaChat h2 {
+    #idAreaChat h3 {
       color: white;
-      margin-top: 0;
+      margin: 0 0 8px;
+      font-size: 16px;
     }
     #idUsuario {
       width: 100%;
@@ -58,61 +98,33 @@
       border-radius: 8px;
       border: none;
       font-size: 16px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       box-sizing: border-box;
     }
     .btn-fila {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
-      flex-wrap: wrap;
     }
     .btn-fila button {
-      padding: 10px 18px;
+      padding: 10px 16px;
       border: none;
       border-radius: 8px;
       background: white;
       color: teal;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-    }
-    .btn-fila button:active {
-      background: #e0e0e0;
-    }
-
-    #colorear {
-      height: 300px;
-      background-color: #eeeeee;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-top: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      transition: background 0.4s ease;
-    }
-
-    #idAreaMensaje {
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 16px;
-      color: #333;
-      min-height: 30px;
-      background: #f0f0f0;
-      border-radius: 8px;
+      flex: 1;
     }
 
     #btnVolver {
-      padding: 10px 20px;
+      padding: 8px 16px;
       border: none;
       border-radius: 8px;
       background: white;
       color: #0077cc;
-      font-size: 22px;
+      font-size: 18px;
       font-weight: bold;
       cursor: pointer;
     }
@@ -123,106 +135,168 @@
   <div data-role="page" id="inicio">
 
     <div data-role="header" data-theme="b">
-      <h1>Mi ChatBot</h1>
+      <h1>✨ Mi Chat Bot</h1>
     </div>
 
     <div data-role="content">
 
-      <!-- Área de búsqueda -->
-      <div id="idAreaChat">
-        <h2>🔍 Buscador</h2>
-        <input type="search" id="idUsuario" placeholder="Escribí una palabra o URL..." />
-        <div class="btn-fila">
-          <button id="idBotonIr">🔎 IR</button>
-          <button id="idBotonMic">🎤 Mic</button>
-        </div>
-      </div>
-
-      <!-- Mensaje reconocimiento de voz -->
-      <div id="idAreaMensaje">Agitá para escuchar o escribí algo...</div>
+      <!-- Asistente animado -->
+      <div id="idAsistente">🧞</div>
+      <div id="idBurbuja">¡Hola! Soy tu asistente. Agitá el teléfono o usá el micrófono.</div>
 
       <!-- Caja que cambia de color al agitar -->
-      <div id="colorear">¡Agitame!</div>
+      <div id="colorear">🤳 ¡Agitame!</div>
+
+      <!-- Buscador -->
+      <div id="idAreaChat">
+        <h3>🔍 ¿Qué querés buscar?</h3>
+        <input type="search" id="idUsuario" placeholder="Escribí sin necesidad de http://" />
+        <div class="btn-fila">
+          <button id="idBotonIr">🔎 Buscar</button>
+          <button id="idBotonMic">🎤 Hablar</button>
+        </div>
+      </div>
 
     </div>
 
     <div data-role="footer" data-theme="b">
       <button id="btnVolver" onclick="fnVolver()">← Volver</button>
-      <h4>Mi ChatBot</h4>
+      <h4>Mi Chat Bot 2025</h4>
     </div>
 
   </div>
 
   <script>
-    // ========== BUSCADOR ==========
-    document.getElementById("idBotonIr").onclick = function () {
-      fnBuscar();
-    };
+    // ========== ASISTENTE RESPUESTAS BASICAS ==========
+    function fnResponder(texto) {
+      texto = texto.toLowerCase().trim();
+      var respuesta = "";
+      var ahora = new Date();
 
-    function fnBuscar() {
-      var texto = document.getElementById("idUsuario").value.trim();
-      if (texto === "") return;
+      if (texto.includes("hola") || texto.includes("buenos") || texto.includes("buen")) {
+        var hora = ahora.getHours();
+        if (hora >= 6 && hora < 12)       respuesta = "¡Buenos días! ☀️ ¿En qué te ayudo?";
+        else if (hora >= 12 && hora < 18) respuesta = "¡Buenas tardes! 🌤️ ¿En qué te ayudo?";
+        else                               respuesta = "¡Buenas noches! 🌙 ¿En qué te ayudo?";
 
-      var url;
-      if (texto.startsWith("http://") || texto.startsWith("https://")) {
-        url = texto;
+      } else if (texto.includes("hora")) {
+        var h = ahora.getHours();
+        var m = ahora.getMinutes().toString().padStart(2, "0");
+        respuesta = "⏰ Son las " + h + ":" + m + " hs";
+
+      } else if (texto.includes("fecha") || texto.includes("día") || texto.includes("hoy")) {
+        var dias   = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+        var meses  = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+        respuesta  = "📅 Hoy es " + dias[ahora.getDay()] + " " + ahora.getDate() + " de " + meses[ahora.getMonth()] + " de " + ahora.getFullYear();
+
+      } else if (texto.includes("cómo estás") || texto.includes("como estas")) {
+        respuesta = "¡Muy bien gracias! 😊 Listo para ayudarte.";
+
+      } else if (texto.includes("nombre") || texto.includes("quién eres") || texto.includes("quien eres")) {
+        respuesta = "Soy tu asistente 🧞 ¡Preguntame lo que quieras!";
+
+      } else if (texto.includes("gracias")) {
+        respuesta = "¡De nada! 😄 Para eso estoy.";
+
+      } else if (texto.includes("chiste")) {
+        var chistes = [
+          "¿Por qué los pájaros vuelan hacia el sur? ¡Porque es muy lejos para caminar! 😂",
+          "¿Qué le dice un techo a otro techo? Techo de menos 😄",
+          "¿Por qué el libro de matemáticas estaba triste? Tenía demasiados problemas 😅"
+        ];
+        respuesta = chistes[Math.floor(Math.random() * chistes.length)];
+
       } else {
-        url = "https://www.google.com/search?q=" + encodeURIComponent(texto);
+        // Si no entiende, busca en Google
+        respuesta = "Buscando \"" + texto + "\" en Google... 🔍";
+        setTimeout(function() {
+          fnAbrirUrl("https://www.google.com/search?q=" + encodeURIComponent(texto));
+        }, 1500);
       }
+
+      if (respuesta) {
+        $("#idBurbuja").text(respuesta);
+        fnHablar(respuesta);
+      }
+    }
+
+    // ========== VOZ SINTETIZADA (el bot habla) ==========
+    function fnHablar(texto) {
+      if ('speechSynthesis' in window) {
+        var utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = "es-AR";
+        utterance.rate = 1;
+        speechSynthesis.speak(utterance);
+      }
+    }
+
+    // ========== BUSCADOR ==========
+    $("#idBotonIr").on("click", function () {
+      var texto = $("#idUsuario").val().trim();
+      if (texto === "") return;
+      fnResponder(texto);
+    });
+
+    function fnAbrirUrl(url) {
       window.location.href = url;
     }
 
+    function fnBuscar(texto) {
+      if (texto.startsWith("http://") || texto.startsWith("https://")) {
+        fnAbrirUrl(texto);
+      } else {
+        fnAbrirUrl("https://www.google.com/search?q=" + encodeURIComponent(texto));
+      }
+    }
+
     // ========== MICROFONO ==========
-    document.getElementById("idBotonMic").onclick = function () {
+    $("#idBotonMic").on("click", function () {
       fnEscuchar();
-    };
+    });
 
     function fnEscuchar() {
       if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        document.getElementById("idAreaMensaje").innerText = "Tu navegador no soporta el micrófono.";
+        $("#idBurbuja").text("Tu navegador no soporta el micrófono 😔");
         return;
       }
-
       var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       var recognition = new SpeechRecognition();
       recognition.lang = "es-AR";
       recognition.interimResults = false;
 
-      document.getElementById("idAreaMensaje").innerText = "🎤 Escuchando...";
+      $("#idBurbuja").text("🎤 Escuchando...");
+      $("#colorear").text("🎤 Escuchando...").css("background", "#9c27b0");
 
       recognition.onresult = function (event) {
         var texto = event.results[0][0].transcript;
         console.log("Escuché: " + texto);
-        document.getElementById("idUsuario").value = texto;
-        document.getElementById("idAreaMensaje").innerText = "Escuché: " + texto;
-        fnBuscar();
+        $("#idUsuario").val(texto);
+        fnResponder(texto);
+        $("#colorear").text("🤳 ¡Agitame!").css("background", "#0077cc");
       };
 
       recognition.onerror = function (event) {
-        document.getElementById("idAreaMensaje").innerText = "Error al escuchar: " + event.error;
+        $("#idBurbuja").text("No te escuché bien 😅 Intentá de nuevo.");
+        $("#colorear").text("🤳 ¡Agitame!").css("background", "#0077cc");
       };
 
       recognition.start();
     }
 
-    // ========== AGITADOR ==========
+    // ========== AGITADOR (llamado desde App Inventor) ==========
     function fnAgitador() {
-      console.log("El teléfono fue agitado");
+      console.log("Teléfono agitado");
 
-      var _random = Math.random() * 3;
-      var _colores = ["red", "fuchsia", "blue"];
-      var _color = _colores[parseInt(_random)];
+      var _colores = ["#e91e63", "#9c27b0", "#ff5722", "#4caf50", "#ff9800"];
+      var _color   = _colores[parseInt(Math.random() * _colores.length)];
 
-      var colorear = document.getElementById("colorear");
-      colorear.style.background = _color;
-      colorear.innerHTML = "🎤 Escuchando...";
+      $("#colorear").css("background", _color).text("🎤 Escuchando...");
+      $("#idBurbuja").text("🎤 Te escucho...");
 
-      // Activa el micrófono al agitar
       fnEscuchar();
 
       setTimeout(function () {
-        colorear.style.background = "#eeeeee";
-        colorear.innerHTML = "¡Agitame!";
+        $("#colorear").css("background", "#0077cc").text("🤳 ¡Agitame!");
       }, 4000);
     }
 
@@ -234,6 +308,16 @@
         window.location.href = "about:blank";
       }
     }
+
+    // Saludo inicial con voz
+    $(document).ready(function () {
+      var hora = new Date().getHours();
+      var saludo = hora < 12 ? "¡Buenos días! ☀️" : hora < 18 ? "¡Buenas tardes! 🌤️" : "¡Buenas noches! 🌙";
+      setTimeout(function () {
+        $("#idBurbuja").text(saludo + " Soy tu asistente 🧞 ¿En qué te ayudo?");
+        fnHablar(saludo + " Soy tu asistente. ¿En qué te ayudo?");
+      }, 1000);
+    });
   </script>
 
 </body>
