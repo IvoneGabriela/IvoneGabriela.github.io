@@ -193,37 +193,30 @@
   <script>
 
     // =========================
-    // AGITADOR DESDE APP INVENTOR
-    // Bloque App Inventor:
-    // call WebViewer1.GoToUrl url "javascript:fnAgitador()"
+    // AGITADOR 
     // =========================
     function fnAgitador() {
       console.log("Agitado!");
 
-      // Los tres colores pedidos en inglés
       var colores = ["violet", "pink", "blue"];
       var color   = colores[Math.floor(Math.random() * colores.length)];
 
       var colorear = document.getElementById("colorear");
       var burbuja  = document.getElementById("idBurbuja");
 
-      // Cambia el color con el nombre en inglés
       colorear.style.background = color;
       colorear.innerText = "🎨 " + color.toUpperCase() + "!";
       burbuja.innerText  = "🎨 Color: " + color;
 
-      // Vuelve a blue después de 3 segundos
+      // Vuelve a Violeta después de 3 segundos
       setTimeout(function () {
-        colorear.style.background = "blue";
+        colorear.style.background = "violet";
         colorear.innerText = "🤳 ¡Agitame!";
       }, 3000);
     }
 
     // =========================
     // RECIBIR TEXTO DESDE APP INVENTOR
-    // Bloque App Inventor con SpeechRecognizer:
-    // call WebViewer1.GoToUrl
-    //   url join "javascript:fnTextoDesdeApp('" result "')"
     // =========================
     function fnTextoDesdeApp(texto) {
       console.log("Desde App Inventor: " + texto);
@@ -361,10 +354,6 @@
 
     // =========================
     // BOTÓN MICRÓFONO
-    // Nota: en WebViewer de App Inventor el micrófono
-    // está bloqueado por seguridad de Android.
-    // Usá SpeechRecognizer en App Inventor y
-    // conectalo con fnTextoDesdeApp()
     // =========================
     document.getElementById("idBotonMic").addEventListener("click", function () {
       var burbuja  = document.getElementById("idBurbuja");
