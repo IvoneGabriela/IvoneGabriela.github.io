@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Buscador</title>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+
+  <style>
+    .ui-header {
+      background-color: #0077cc !important;
+      border-color: #005fa3 !important;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ui-header h1 {
+      color: #ffffff !important;
+      font-size: 20px;
+      line-height: 60px;
+    }
+    .ui-footer {
+      background-color: #0077cc !important;
+      border-color: #005fa3 !important;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ui-footer h4 {
+      color: #ffffff !important;
+      font-size: 14px;
+      margin: 0;
+    }
+    .ui-content {
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Area chat */
+    #idAreaChat {
+      background: teal;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+      margin-top: 20px;
+    }
+    #idAreaChat h2 {
+      color: white;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    #idUsuario {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    #idBotonIr, #idBotonMic {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: white;
+      color: teal;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 5px;
+    }
+    #idBotonIr:active, #idBotonMic:active {
+      background: #e0e0e0;
+    }
+
+    /* Area colorear al agitar */
+    #colorear {
+      height: 300px;
+      background-color: #eeeeee;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Mensajes */
+    #idAreaMensaje {
+      margin-top: 15px;
+      font-size: 15px;
+      color: #333;
+      min-height: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <div data-role="page" id="inicio">
+
+    <div data-role="header" data-theme="b">
+      <h1>Mi App</h1>
+    </div>
+
+    <div data-role="content">
+
+      <!-- Area de mensajes -->
+      <div id="idAreaMensaje"></div>
+
+      <!-- Buscador -->
+      <div id="idAreaChat">
+        <h2>Escribí acá</h2>
+        <input type="search" id="idUsuario" placeholder="Palabra o URL..." />
+        <br>
+        <button id="idBotonIr">IR</button>
+        <button id="idBotonMic">🎤 Mic</button>
+      </div>
+
+      <!-- Sensor agitar -->
+      <div id="colorear">
+        ¡Agitame!
+      </div>
+
+    </div>
+
+    <div data-role="footer" data-theme="b">
+      <h4>Desarrollado con App Inventor</h4>
+    </div>
+
+  </div>
+
+  <script>
+    // ======= BUSCADOR =======
+    document.getElementById("idBotonIr").onclick = function() {
+      var texto = document.getElementById("idUsuario").value.trim();
+
+      if (texto === "") {
+        document.getElementById("idAreaMensaje").innerHTML = "⚠️ Escribí algo primero";
+        return;
+      }
+
+      var url;
+      if (texto.startsWith("http://") || texto.startsWith("https://")) {
+        url = texto;
+      } else {
+        url = "https://www.google.com/search?q=" + encodeURIComponent(texto);
+      }
+
+      window.location.href = url;
+    };
+
+    // ======= MICROFONO =======
+    document.getElementById("idBotonMic").onclick = function() {
+      escuchar({ termino: fnEscuchado });
+    };
+
+    function fnEscuchado(texto) {
+      console.log("Escuchado: " + texto);
+      document.getElementById("idUsuario").value = texto;
+      document.getElementById("idAreaMensaje").innerHTML = "🎤 Escuché: " + texto;
+    }
+
+    // ======= SENSOR AGITAR (llamado desde App Inventor) =======
+    function fnAgitador() {
+      console.log("El teléfono fue agitado");
+
+      var _random = Math.random() * 3;
+      var _colores = ["red", "fuchsia", "blue"];
+      var _color = _colores[parseInt(_random)];
+
+      var colorear = document.getElementById("colorear");
+      colorear.style.background = _color;
+      colorear.innerHTML = "¡Color: " + _color + "!";
+
+      setTimeout(function () {
+        colorear.style.background = "#eeeeee";
+        colorear.innerHTML = "¡Agitame!";
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
