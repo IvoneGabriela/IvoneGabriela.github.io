@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bienestar Estudiantil</title>
+<title>Observatorio Digital de Bienestar Estudiantil</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -530,6 +530,15 @@
 
   .error-msg.show { display:flex; }
 
+  /* ── Spinner ── */
+  .spinner {
+    display:inline-block;width:16px;height:16px;
+    border:2.5px solid rgba(255,255,255,.35);
+    border-top-color:white;border-radius:50%;
+    animation:spin .7s linear infinite;vertical-align:middle;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
   /* ── Responsive ── */
   @media(max-width:600px){
     header { padding:20px; }
@@ -569,9 +578,10 @@
 
 <script>
 // ============================================================
-// CONFIGURACIÓN — Reemplazar con tu URL de Google Apps Script
+// ⚠️  PASO ÚNICO: Pegá tu URL de Apps Script aquí abajo
+//     Debe terminar en /exec  (no en /dev)
 // ============================================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/TU_ID_AQUI/exec";
+const GOOGLE_SCRIPT_URL = "PEGAR_URL_AQUI";
 // ============================================================
 
 const steps = [
@@ -850,22 +860,25 @@ function prevStep() {
 }
 
 async function submitSurvey() {
+  // 1. Guardar el textarea (mensaje)
+  const campo = document.getElementById("inputField");
+  if (campo) answers["mensaje"] = campo.value;
 
-  // ── 1. Guardar el último campo (textarea del mensaje) ─────
-  const inputField = document.getElementById("inputField");
-  if (inputField) {
-    answers["mensaje"] = inputField.value;
+  // 2. Verificar que la URL fue configurada
+  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "PEGAR_URL_AQUI") {
+    mostrarToast("❌ Falta pegar la URL del Apps Script en el código.", "error");
+    return;
   }
 
-  // ── 2. Mostrar pantalla de éxito inmediatamente (mejor UX) ─
-  showFinal();
+  // 3. Bloquear el botón y mostrar spinner mientras envía
+  const btnEnviar = document.querySelector(".btn-submit");
+  if (btnEnviar) {
+    btnEnviar.disabled = true;
+    btnEnviar.innerHTML = `<span class="spinner"></span> Enviando…`;
+  }
 
-  // ── 3. URL de tu Google Apps Script ───────────────────────
-  //       Pegá tu enlace /exec entre las comillas de abajo
-  const url = 'TU_URL_DE_GOOGLE_AQUI'; // <--- REEMPLAZÁ ESTO
-
-  // ── 4. Armar los datos — nombres exactos que recibe el Script
-  const datos = {
+  // 4. Armar payload — nombres exactos que lee el Apps Script
+  const payload = {
     nombre:        answers["nombre"]        || "Anónimo",
     pertenencia:   answers["pertenencia"]   || "",
     apoyo:         answers["apoyo"]         || "",
@@ -875,22 +888,61 @@ async function submitSurvey() {
     mensaje:       answers["mensaje"]       || ""
   };
 
-  // ── 5. Enviar a Google Sheets ──────────────────────────────
-  fetch(url, {
-    method: 'POST',
-    mode: 'no-cors',    // Necesario para Google Apps Script
-    cache: 'no-cache',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datos)
-  })
-  .then(() => {
-    // Con mode: no-cors no podemos leer la respuesta, pero llegó bien
-    console.log('✅ Datos enviados a Google Sheets:', datos);
-  })
-  .catch(error => {
-    // Solo se activa si hay un problema de red
-    console.error('❌ Error al enviar:', error);
+  console.log("📤 Enviando a Google Sheets:", payload);
+
+  try {
+    // mode:"no-cors" es obligatorio con Google Apps Script
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method:  "POST",
+      mode:    "no-cors",
+      cache:   "no-cache",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify(payload)
+    });
+    // Con no-cors el fetch siempre "resuelve" (no tira error aunque falle)
+    // Si llegamos acá, el envío se completó sin error de red
+    console.log("✅ Enviado correctamente");
+    showFinal();
+  } catch (e) {
+    console.error("❌ Error de red:", e);
+    mostrarToast("❌ Error de conexión. Revisá tu internet y la URL del script.", "error");
+    if (btnEnviar) {
+      btnEnviar.disabled = false;
+      btnEnviar.innerHTML = "✅ Enviar respuestas";
+    }
+  }
+}
+
+// ── Toast de notificación ─────────────────────────────────────
+function mostrarToast(msg, tipo) {
+  // Crear o reusar el toast
+  let toast = document.getElementById("toastMsg");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toastMsg";
+    toast.style.cssText = `
+      position:fixed;bottom:28px;right:28px;z-index:9999;
+      padding:13px 20px;border-radius:12px;
+      font-family:'Sora',sans-serif;font-size:.84rem;font-weight:600;
+      box-shadow:0 8px 30px rgba(0,0,0,.15);
+      display:flex;align-items:center;gap:8px;
+      transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+      transform:translateY(80px);opacity:0;
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.background = tipo === "error" ? "#DC2626" : "#059669";
+  toast.style.color = "white";
+  // Animar entrada
+  requestAnimationFrame(() => {
+    toast.style.transform = "translateY(0)";
+    toast.style.opacity = "1";
   });
+  setTimeout(() => {
+    toast.style.transform = "translateY(80px)";
+    toast.style.opacity = "0";
+  }, 4500);
 }
 
 function showFinal() {
