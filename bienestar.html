@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bienestar Estudiantil</title>
+<title>Observatorio Digital de Bienestar Estudiantil</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -583,7 +583,7 @@ const steps = [
       <div class="welcome-hero">
         <img class="faro-big" src="${document.querySelector('.logo').src}" alt="">
         <h2>¡Hola! Bienvenid@ al<br><span>Observatorio del Bienestar</span></h2>
-        <p>Esta encuesta fue creada por Gabriela Roldan con el objetivo de entender cómo estamos como comunidad estudiantil y usar esos datos para construir algo mejor.</p>
+        <p>Esta encuesta fue creada por nosotras y nosotros, para nosotras y nosotros. Queremos entender cómo estamos como comunidad estudiantil y usar esos datos para construir algo mejor.</p>
         <p style="margin-top:10px;">Son <strong>7 preguntas</strong> y lleva menos de 3 minutos.</p>
         <div class="privacy-note">✅ Es completamente anónima. No hay respuestas correctas o incorrectas.</div>
       </div>
@@ -850,19 +850,23 @@ function prevStep() {
 }
 
 async function submitSurvey() {
-  const step = steps[currentStep];
-  // Textarea is optional, just collect
-  if (document.getElementById("inputField")) {
-    answers[step.id] = document.getElementById("inputField").value;
+
+  // ── 1. Guardar el último campo (textarea del mensaje) ─────
+  const inputField = document.getElementById("inputField");
+  if (inputField) {
+    answers["mensaje"] = inputField.value;
   }
 
-  // Mostrar pantalla de éxito
+  // ── 2. Mostrar pantalla de éxito inmediatamente (mejor UX) ─
   showFinal();
 
-  // ── Envío a Google Sheets ─────────────────────────────────
-  const payload = {
-    timestamp: new Date().toISOString(),
-    nombre:        answers["nombre"]        || "(anónimo)",
+  // ── 3. URL de tu Google Apps Script ───────────────────────
+  //       Pegá tu enlace /exec entre las comillas de abajo
+  const url = 'TU_URL_DE_GOOGLE_AQUI'; // <--- REEMPLAZÁ ESTO
+
+  // ── 4. Armar los datos — nombres exactos que recibe el Script
+  const datos = {
+    nombre:        answers["nombre"]        || "Anónimo",
     pertenencia:   answers["pertenencia"]   || "",
     apoyo:         answers["apoyo"]         || "",
     motivacion:    answers["motivacion"]    || "",
@@ -871,17 +875,22 @@ async function submitSurvey() {
     mensaje:       answers["mensaje"]       || ""
   };
 
-  try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-  } catch (e) {
-    // El modo no-cors no retorna errores — está bien
-    console.log("Enviado:", payload);
-  }
+  // ── 5. Enviar a Google Sheets ──────────────────────────────
+  fetch(url, {
+    method: 'POST',
+    mode: 'no-cors',    // Necesario para Google Apps Script
+    cache: 'no-cache',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(datos)
+  })
+  .then(() => {
+    // Con mode: no-cors no podemos leer la respuesta, pero llegó bien
+    console.log('✅ Datos enviados a Google Sheets:', datos);
+  })
+  .catch(error => {
+    // Solo se activa si hay un problema de red
+    console.error('❌ Error al enviar:', error);
+  });
 }
 
 function showFinal() {
