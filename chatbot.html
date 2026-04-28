@@ -150,23 +150,21 @@
 
   <script>
 
-    // AGITADOR - solo cambia color, no muestra nada en la burbuja
+    // AGITADOR - cambia color del cuadro
     function fnAgitador() {
       console.log("Agitado");
       var colores = ["lightgreen", "blue", "violet"];
       var color = colores[Math.floor(Math.random() * colores.length)];
       var colorear = document.getElementById("colorear");
-
       colorear.style.background = color;
       colorear.innerText = color.toUpperCase();
-
       setTimeout(function () {
         colorear.style.background = "blue";
         colorear.innerText = "Agitame";
       }, 3000);
     }
 
-    // FUNCIÓN ESCUCHADO (requerida por el profesor)
+    // FUNCIÓN ESCUCHADO - pedida por el profesor
     function fnEscuchado(_textoEscuchado) {
       console.log(_textoEscuchado);
       fnTextoDesdeApp(_textoEscuchado);
@@ -242,8 +240,7 @@
         document.getElementById("idBurbuja").innerText = respuesta;
         fnHablar("Buscando " + texto + " en Google");
         setTimeout(function () {
-          window.location.href = "https://www.google.com/search?q=" +
-                                  encodeURIComponent(texto);
+          window.location.href = "https://www.google.com/search?q=" + encodeURIComponent(texto);
         }, 1200);
         return;
       }
@@ -259,6 +256,8 @@
         var utterance = new SpeechSynthesisUtterance(texto);
         utterance.lang = "es-AR";
         utterance.rate = 1;
+        utterance.pitch = 1;
+        utterance.volume = 1;
         window.speechSynthesis.speak(utterance);
       }
     }
@@ -295,9 +294,9 @@
     // SALUDO INICIAL
     window.addEventListener("load", function () {
       setTimeout(function () {
-        document.getElementById("idBurbuja").innerText =
-          "Hola. Soy tu asistente. ¿En qué te ayudo?";
-        fnHablar("Hola. Soy tu asistente. ¿En qué te ayudo?");
+        var msg = "Hola. Soy tu asistente. ¿En qué te ayudo?";
+        document.getElementById("idBurbuja").innerText = msg;
+        fnHablar(msg);
       }, 1000);
     });
 
