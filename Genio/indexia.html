@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <script src="./uutiles.js"></script>
+    <style>
+      #idAreaChat {
+        background: teal;
+        border-radius: 10px;
+        padding: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="idAreaMensajes"></div>
+    <div como="ventana" id="idAreaChat">
+      <h2>Escribí acá</h2>
+      <input type="search" id="idUsuario" />
+      <button id="idBotonIr">Ir</button>
+      <button id="idBotonMic">Mic</button>
+    </div>
+
+    <script>
+      // el nombre va con mayúscula - opciones: "Clippy", "Genie", "Rover",
+      // "Merlin", "Links", "Genius", "Peedy", "Bonzi", "F1", "Rocky"
+      asistente.cargarAgente("Clippy");
+
+      idBotonMic.onclick = fnClickMic;
+      function fnClickMic() {
+        console.log("Click en micrófono");
+        escuchar({
+          termino: fnEscuchado,
+          idioma: "es-AR"
+        });
+      }
+
+      function fnEscuchado(_textoEscuchado) {
+        console.log("Texto escuchado:", _textoEscuchado);
+        hablar("Escuché: " + _textoEscuchado);
+        asistente.decir(_textoEscuchado);
+        idUsuario.value = _textoEscuchado;
+        idUsuario.focus();
+        idUsuario.select();
+      }
+
+      idBotonIr.onclick = fnClickIr;
+      function fnClickIr() {
+        console.log("estamos en la funcion fnClickIr");
+        fnProcesarIA(idUsuario.value);
+      }
+
+      function fnProcesarIA(_dadoTexto) {
+        console.log("procesando [%s]", _dadoTexto);
+        let _minus = _dadoTexto.toLowerCase();
+
+        if (_minus == "hola") {
+          hablar("hola");
+          asistente.decir("¡Hola!");
+          idAreaMensajes.innerHTML = "holis";
+        }
+
+        if (_minus.includes("hora")) {
+          let _horaActual = __ahora.frase("H:i:s");
+          hablar("Son las " + _horaActual);
+          asistente.decir("Son las " + _horaActual);
+          idAreaMensajes.innerHTML = _horaActual;
+        }
+
+        let _patron1 = /me llamo (.+)/i;
+        let _extraccion1 = _patron1.exec(_dadoTexto);
+        if (_extraccion1 != null) {
+          let _nombre = _extraccion1[1];
+          hablar("Hola " + _nombre + ", ¿Cómo estás?");
+          asistente.decir("Hola " + _nombre + ", ¿Cómo estás?");
+          idAreaMensajes.innerHTML = "Hola " + _nombre + "!";
+        }
+
+        let _patron2 = /(?:yo soy|mi nombre es) (.+)/i;
+        let _extraccion2 = _patron2.exec(_dadoTexto);
+        if (_extraccion2 != null) {
+          let _nombre = _extraccion2[1];
+          hablar("Hola " + _nombre + ", ¿Cómo estás?");
+          asistente.decir("Hola " + _nombre + ", ¿Cómo estás?");
+          idAreaMensajes.innerHTML = "Hola " + _nombre + "!";
+        }
+      }
+    </script>
+  </body>
+</html>
