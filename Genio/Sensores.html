@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- jQuery Mobile CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css" />
+        <!-- Theme -->
+        <link rel="stylesheet" href="https://gorosito.red/bloques/apps/vendor/themes/themario2.min.css">
+        <link rel="stylesheet" href="https://gorosito.red/bloques/apps/vendor/themes/jquery.mobile.icons.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+        <script src="https://gorosito.red/dame/uutiles.js"></script>
+    </head>
+    <body>
+        <div data-role="page" id="idPantalla1" data-theme="b" >
+            <header data-role="header">
+                <h1>Título</h1>
+                <a href="#" data-icon="home" >Inicio</a>
+                <a href="#" data-icon="gear" >Opciones</a>
+            </header>
+            <main data-role="content">
+                <h2>Subtítulo</h2>
+                <div> 
+                    <p> X: <input id="idX" /></p>
+                    <p> Y: <input id="idY" /></p>
+                    <p> Z: <input id="idZ" /></p>
+                </div>
+                <div>
+                    <p> El celular está 
+                        <output id="idEstadoCelular"> Averiguando</output>
+                    </p>
+                </div>
+
+                <ul data-role="listview" data-filter="true" data-placeholder="Buscar" data-inset="true">
+
+                </ul>
+            </main>
+            <footer data-role="footer">
+                <h3>ABC &copy; 2026</h3>
+            </footer>
+        </div>   
+        <script>
+            function fnAcelerometro( _dadoX, _dadoY, _dadoZ ){
+                idX.value = _dadoX;
+                idY.value = _dadoY;
+                idZ.value = _dadoZ;
+                if (_dadoZ> 8){
+                    idEstadoCelular.value = "Boca arriba";
+                }
+                else if(_dadoZ <-8) {
+                    idEstadoCelular.value = "Boca Abajo";
+                }
+                else if (_dadoX >8){
+                idEstadoCelular.value = "De costado";
+                }
+                else if (_dadoX < -8){
+                idEstadoCelular.value = "De costado";
+                }
+                else if (_dadoY >8){
+                idEstadoCelular.value = "Parado";
+                }   
+                else if (_dadoX < -8){
+                idEstadoCelular.value = "Parado";
+                }
+                return; 
+            }
+            Habilitar.eruda() ;
+        </script>     
+    </body>
+</html>
