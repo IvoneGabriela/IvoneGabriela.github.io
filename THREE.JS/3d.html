@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cubo 3D - THREE.js</title>
+  <link rel="icon" href="logo.png"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: black;
+      font-family: monospace;
+      overflow: hidden;
+      color: white;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    #panel {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.7);
+      border: 1px solid gold;
+      padding: 16px;
+      border-radius: 8px;
+      min-width: 200px;
+      z-index: 10;
+    }
+
+    #panel h2 {
+      color: gold;
+      font-size: 14px;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .fila {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .fila label {
+      width: 80px;
+      color: lightgray;
+    }
+
+    .fila input[type=range] {
+      flex: 1;
+      accent-color: gold;
+    }
+
+    .fila span {
+      width: 36px;
+      text-align: right;
+      color: gold;
+      font-size: 12px;
+    }
+
+    #colorFila {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    #colorFila label { color: lightgray; width: 80px; }
+    #colorFila input { cursor: pointer; }
+
+    .btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 7px;
+      background: gold;
+      color: black;
+      border: none;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .btn:hover { background: yellow; }
+
+    #ejes {
+      position: fixed;
+      bottom: 30px;
+      left: 20px;
+      font-size: 12px;
+      line-height: 1.8;
+      background: rgba(0,0,0,0.6);
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid #333;
+    }
+
+    #footer {
+      position: fixed;
+      bottom: 8px;
+      right: 12px;
+      font-size: 11px;
+      color: gold;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+
+<div id="panel">
+  <h2>🧊 Cubo 3D</h2>
+
+  <div class="fila">
+    <label>Pos X</label>
+    <input type="range" id="px" min="-3" max="3" step="0.1" value="0"/>
+    <span id="vx">0</span>
+  </div>
+  <div class="fila">
+    <label>Pos Y</label>
+    <input type="range" id="py" min="-3" max="3" step="0.1" value="0"/>
+    <span id="vy">0</span>
+  </div>
+  <div class="fila">
+    <label>Pos Z</label>
+    <input type="range" id="pz" min="-3" max="3" step="0.1" value="0"/>
+    <span id="vz">0</span>
+  </div>
+
+  <div class="fila">
+    <label>Escala</label>
+    <input type="range" id="sc" min="0.1" max="3" step="0.1" value="1"/>
+    <span id="vs">1</span>
+  </div>
+
+  <div id="colorFila">
+    <label>Color</label>
+    <input type="color" id="color" value="#ffd700"/>
+  </div>
+
+  <button class="btn" id="btnAnim">▶ Animar</button>
+  <button class="btn" id="btnWire" style="margin-top:6px; background:transparent; color:gold; border:1px solid gold;">Wireframe</button>
+</div>
+
+<div id="ejes">
+  <span style="color:royalblue">■</span> X = azul → izquierda / derecha<br/>
+  <span style="color:limegreen">■</span> Y = verde → arriba / abajo<br/>
+  <span style="color:tomato">■</span> Z = rojo → adelante / atrás
+</div>
+
+<div id="footer">Gabriela Roldan - Disenio de Sistemas 2026</div>
+
+<script>
+// Trabajo realizado por Gabriela Roldan / Disenio de Sistemas - 2026
+
+// --- ESCENA ---
+var escena = new THREE.Scene();
+escena.background = new THREE.Color("black");
+
+// --- CAMARA ---
+var camara = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+camara.position.set(3, 2, 5);
+camara.lookAt(0, 0, 0);
+
+// --- RENDERER ---
+var renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// --- LUZ ---
+var luzAmbiental = new THREE.AmbientLight("white", 0.4);
+escena.add(luzAmbiental);
+
+var luzDireccional = new THREE.DirectionalLight("white", 1);
+luzDireccional.position.set(5, 10, 7);
+escena.add(luzDireccional);
+
+// --- EJES (gizmo simple) ---
+var ejesHelper = new THREE.AxesHelper(3);
+escena.add(ejesHelper);
+
+// --- GRILLA ---
+var grilla = new THREE.GridHelper(10, 10, "gray", "dimgray");
+escena.add(grilla);
+
+// --- CUBO ---
+var _cubo = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshPhongMaterial({ color: "gold" })
+);
+_cubo.name = "Fede";
+escena.add(_cubo);
+
+// --- CONTROLES PANEL ---
+var animando = false;
+var wireframe = false;
+
+document.getElementById("px").addEventListener("input", function() {
+  _cubo.position.x = parseFloat(this.value);
+  document.getElementById("vx").textContent = this.value;
+});
+document.getElementById("py").addEventListener("input", function() {
+  _cubo.position.y = parseFloat(this.value);
+  document.getElementById("vy").textContent = this.value;
+});
+document.getElementById("pz").addEventListener("input", function() {
+  _cubo.position.z = parseFloat(this.value);
+  document.getElementById("vz").textContent = this.value;
+});
+document.getElementById("sc").addEventListener("input", function() {
+  var s = parseFloat(this.value);
+  _cubo.scale.set(s, s, s);
+  document.getElementById("vs").textContent = this.value;
+});
+document.getElementById("color").addEventListener("input", function() {
+  _cubo.material.color.set(this.value);
+});
+
+document.getElementById("btnAnim").addEventListener("click", function() {
+  animando = !animando;
+  this.textContent = animando ? "⏸ Pausar" : "▶ Animar";
+});
+
+document.getElementById("btnWire").addEventListener("click", function() {
+  wireframe = !wireframe;
+  _cubo.material.wireframe = wireframe;
+  this.textContent = wireframe ? "Solido" : "Wireframe";
+});
+
+// --- RESIZE ---
+window.addEventListener("resize", function() {
+  camara.aspect = window.innerWidth / window.innerHeight;
+  camara.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// --- LOOP DE ANIMACION ---
+function animar() {
+  requestAnimationFrame(animar);
+  if (animando) {
+    _cubo.rotation.x += 0.01;
+    _cubo.rotation.y += 0.015;
+  }
+  renderer.render(escena, camara);
+}
+
+animar();
+</script>
+</body>
+</html>
