@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142d4c">
+  <meta name="description" content="Evaluación de Historia Argentina reciente para 4.º año">
+  <title>Historia argentina reciente | 4.º año</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23142d4c'/%3E%3Cpath d='M16 15h32v34H16z' fill='%23fff'/%3E%3Cpath d='M21 21h22M21 28h22M21 35h16' stroke='%232d78b7' stroke-width='4'/%3E%3Ccircle cx='43' cy='43' r='8' fill='%23e2a33a'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink:#172231; --navy:#142d4c; --blue:#2d78b7; --sky:#eaf3fb;
+      --paper:#f7f9fc; --white:#fff; --line:#d7e0ea; --gold:#e2a33a;
+      --green:#207356; --red:#a43b45; --shadow:0 18px 50px rgba(20,45,76,.14);
+    }
+    * { box-sizing:border-box; }
+    html { min-height:100%; background:var(--paper); }
+    body { margin:0; min-height:100vh; font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink); background:radial-gradient(circle at 10% 0%,#dbeeff 0,transparent 34%),linear-gradient(145deg,#f8fbff 0,#eef3f8 100%); }
+    button,input { font:inherit; }
+    button { -webkit-tap-highlight-color:transparent; }
+    .shell { width:min(920px,calc(100% - 28px)); margin:0 auto; padding:26px 0 42px; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:22px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:850; color:var(--navy); letter-spacing:.02em; }
+    .seal { width:42px; height:42px; display:grid; place-items:center; border-radius:12px; background:var(--navy); color:white; box-shadow:0 8px 18px rgba(20,45,76,.2); }
+    .status { font-size:.92rem; font-weight:750; color:#526273; background:rgba(255,255,255,.75); border:1px solid var(--line); padding:8px 12px; border-radius:999px; }
+    .card { background:rgba(255,255,255,.96); border:1px solid rgba(215,224,234,.9); border-radius:24px; box-shadow:var(--shadow); overflow:hidden; }
+    .card-inner { padding:clamp(24px,5vw,48px); }
+    .eyebrow { margin:0 0 8px; color:var(--blue); font-size:.82rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; }
+    h1 { margin:0; color:var(--navy); font-size:clamp(2rem,6vw,4.2rem); line-height:1; letter-spacing:-.045em; max-width:760px; }
+    h2 { margin:0; color:var(--navy); font-size:clamp(1.35rem,3.5vw,2rem); line-height:1.25; }
+    .lede { font-size:1.08rem; line-height:1.65; color:#4e5d6d; max-width:700px; margin:20px 0 28px; }
+    .rulebox { display:grid; grid-template-columns:auto 1fr; gap:14px; padding:18px; border-radius:16px; background:var(--sky); border-left:5px solid var(--gold); margin:22px 0; }
+    .rulebox strong { color:var(--navy); }
+    .rulebox p { margin:2px 0 0; line-height:1.5; color:#47586a; }
+    .form-grid { display:grid; grid-template-columns:2fr 1fr; gap:14px; margin:26px 0 20px; }
+    label { display:block; color:var(--navy); font-size:.9rem; font-weight:850; margin-bottom:7px; }
+    input[type="text"] { width:100%; min-height:52px; border:2px solid var(--line); border-radius:13px; padding:12px 14px; color:var(--ink); background:#fff; outline:none; transition:.18s ease; }
+    input[type="text"]:focus { border-color:var(--blue); box-shadow:0 0 0 4px rgba(45,120,183,.13); }
+    .btn { min-height:52px; border:0; border-radius:14px; padding:12px 20px; font-weight:900; cursor:pointer; transition:transform .14s ease,filter .14s ease,box-shadow .14s ease; }
+    .btn:hover { filter:brightness(1.04); transform:translateY(-1px); }
+    .btn:focus-visible { outline:4px solid rgba(45,120,183,.28); outline-offset:2px; }
+    .btn-primary { width:100%; color:white; background:linear-gradient(135deg,var(--navy),var(--blue)); box-shadow:0 10px 24px rgba(45,120,183,.22); }
+    .btn-primary:disabled { cursor:not-allowed; opacity:.45; transform:none; box-shadow:none; }
+    .tiny { font-size:.84rem; color:#718092; line-height:1.45; }
+    .hidden { display:none !important; }
+    .quiz-head { background:var(--navy); color:white; padding:18px clamp(24px,5vw,48px); }
+    .quiz-meta { display:flex; align-items:center; justify-content:space-between; gap:14px; font-size:.92rem; font-weight:800; }
+    .progress-track { height:8px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.18); margin-top:13px; }
+    .progress-bar { height:100%; width:0; background:linear-gradient(90deg,#73c4ff,var(--gold)); transition:width .35s ease; }
+    .question-type { display:inline-flex; align-items:center; min-height:28px; padding:5px 10px; border-radius:999px; background:var(--sky); color:var(--blue); font-size:.78rem; font-weight:900; text-transform:uppercase; letter-spacing:.07em; margin-bottom:18px; }
+    .question-text { font-size:clamp(1.3rem,3.5vw,1.85rem); line-height:1.28; margin-bottom:24px; }
+    .answers { display:grid; gap:12px; }
+    .option { position:relative; display:grid; grid-template-columns:36px 1fr; align-items:center; gap:12px; width:100%; min-height:58px; border:2px solid var(--line); border-radius:15px; padding:11px 14px; background:white; text-align:left; color:var(--ink); cursor:pointer; transition:.16s ease; }
+    .option:hover { border-color:#9fc6e7; background:#f8fcff; }
+    .option.selected { border-color:var(--blue); background:var(--sky); box-shadow:0 0 0 3px rgba(45,120,183,.10); }
+    .letter { display:grid; place-items:center; width:32px; height:32px; border-radius:10px; background:#edf1f5; color:var(--navy); font-weight:900; }
+    .option.selected .letter { background:var(--blue); color:white; }
+    .short-help { margin:12px 0 0; color:#6b7785; font-size:.88rem; }
+    .actions { display:flex; justify-content:flex-end; margin-top:26px; }
+    .actions .btn { min-width:180px; color:white; background:var(--navy); }
+    .message { min-height:24px; margin-top:12px; color:var(--red); font-weight:750; font-size:.92rem; }
+    .result-wrap { text-align:center; }
+    .score-ring { width:160px; height:160px; margin:28px auto 18px; border-radius:50%; display:grid; place-items:center; background:conic-gradient(var(--blue) var(--score-angle),#e5ebf2 0); position:relative; }
+    .score-ring::before { content:""; position:absolute; width:126px; height:126px; border-radius:50%; background:white; }
+    .score-number { position:relative; color:var(--navy); font-size:2.8rem; font-weight:950; letter-spacing:-.05em; }
+    .score-number small { font-size:1rem; letter-spacing:0; }
+    .result-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:26px 0; text-align:left; }
+    .metric { padding:16px; border:1px solid var(--line); border-radius:15px; background:#f9fbfd; }
+    .metric span { display:block; color:#758395; font-size:.78rem; font-weight:800; text-transform:uppercase; letter-spacing:.07em; }
+    .metric strong { display:block; margin-top:4px; color:var(--navy); font-size:1.15rem; overflow-wrap:anywhere; }
+    .code { display:inline-block; margin:10px 0 22px; padding:12px 16px; border-radius:12px; background:var(--navy); color:white; font:800 1rem ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.08em; }
+    .print-btn { max-width:360px; margin:0 auto; }
+    .error-card { border-left:5px solid var(--red); }
+    @media (max-width:650px) {
+      .shell { width:min(100% - 18px,920px); padding-top:12px; }
+      .topbar { align-items:flex-start; }
+      .brand span:last-child { max-width:180px; }
+      .card { border-radius:18px; }
+      .form-grid,.result-grid { grid-template-columns:1fr; }
+      .quiz-meta { align-items:flex-start; flex-direction:column; gap:6px; }
+      .actions .btn { width:100%; }
+    }
+    @media print {
+      body { background:white; }
+      .topbar,.print-btn,.tiny { display:none !important; }
+      .shell { width:100%; padding:0; }
+      .card { border:0; box-shadow:none; }
+      .card-inner { padding:20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="seal" aria-hidden="true">4.º</span><span>Historia argentina reciente</span></div>
+      <div class="status" id="topStatus">Evaluación individual</div>
+    </header>
+
+    <section class="card" id="startScreen">
+      <div class="card-inner">
+        <p class="eyebrow">Actividad evaluativa</p>
+        <h1>Antes y después de 1976</h1>
+        <p class="lede">Respondé 20 consignas sobre el contexto político, las organizaciones armadas, la Noche de los Lápices, las Madres de Plaza de Mayo y el terrorismo de Estado.</p>
+        <div class="rulebox">
+          <strong>Una sola oportunidad</strong>
+          <p>Cada respuesta queda guardada al confirmar. No se puede volver a preguntas anteriores. Si recargás la página, continuarás desde donde estabas.</p>
+        </div>
+        <div class="form-grid">
+          <div><label for="studentName">Nombre y apellido</label><input id="studentName" type="text" maxlength="60" autocomplete="name" placeholder="Escribí tu nombre completo"></div>
+          <div><label for="studentCourse">Curso</label><input id="studentCourse" type="text" maxlength="20" value="4.º año" autocomplete="off"></div>
+        </div>
+        <button class="btn btn-primary" id="startBtn">Comenzar evaluación</button>
+        <p class="tiny">No cierres la pestaña hasta obtener tu constancia final. No está permitido copiar y pegar respuestas.</p>
+      </div>
+    </section>
+
+    <section class="card hidden" id="quizScreen" aria-live="polite">
+      <div class="quiz-head">
+        <div class="quiz-meta"><span id="studentLabel"></span><span id="questionCounter"></span></div>
+        <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+      <div class="card-inner">
+        <span class="question-type" id="questionType"></span>
+        <h2 class="question-text" id="questionText"></h2>
+        <div class="answers" id="answers"></div>
+        <p class="message" id="message" role="alert"></p>
+        <div class="actions"><button class="btn" id="confirmBtn" disabled>Confirmar y continuar</button></div>
+      </div>
+    </section>
+
+    <section class="card hidden" id="resultScreen">
+      <div class="card-inner result-wrap">
+        <p class="eyebrow">Evaluación finalizada</p>
+        <h1 style="font-size:clamp(2rem,5vw,3.4rem);margin:auto">Constancia de resultado</h1>
+        <div class="score-ring" id="scoreRing"><div class="score-number"><span id="grade">0</span><small>/10</small></div></div>
+        <p class="lede" style="margin-left:auto;margin-right:auto" id="resultMessage"></p>
+        <div class="result-grid">
+          <div class="metric"><span>Estudiante</span><strong id="resultName"></strong></div>
+          <div class="metric"><span>Aciertos</span><strong id="correctCount"></strong></div>
+          <div class="metric"><span>Fecha y hora</span><strong id="resultDate"></strong></div>
+        </div>
+        <p class="tiny" style="margin-bottom:4px">Código de comprobación</p>
+        <div class="code" id="resultCode"></div>
+        <button class="btn btn-primary print-btn" id="printBtn">Guardar o imprimir constancia</button>
+      </div>
+    </section>
+
+    <section class="card hidden error-card" id="lockedScreen">
+      <div class="card-inner">
+        <p class="eyebrow">Intento ya finalizado</p>
+        <h2>Este dispositivo ya registró una evaluación.</h2>
+        <p class="lede">Mostrá la constancia guardada a la profesora. Si hubo un problema técnico real, avisale antes de comenzar otro intento.</p>
+        <button class="btn btn-primary" id="showResultBtn">Ver constancia</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const QUESTIONS = [
+      {t:'Opción múltiple',q:'¿Qué tipo de gobierno existía en Argentina inmediatamente antes del golpe del 24 de marzo de 1976?',o:['Una monarquía constitucional','Un gobierno constitucional peronista','Un gobierno comunista','Una administración militar provisional'],a:1},
+      {t:'Opción múltiple',q:'¿Cuál afirmación diferencia correctamente a Montoneros del PRT-ERP?',o:['Eran dos nombres de la misma organización','Montoneros pertenecía al peronismo revolucionario y el PRT-ERP tenía orientación marxista','El ERP era peronista y Montoneros liberal','Ninguna de las dos realizó acciones armadas'],a:1},
+      {t:'Opción múltiple',q:'¿Qué demuestra la existencia de violencia política antes de marzo de 1976?',o:['Que el golpe era inevitable y legal','Que el conflicto comenzó antes, pero no justificaba eliminar el orden constitucional','Que todas las víctimas eran combatientes','Que no existían instituciones judiciales'],a:1},
+      {t:'Opción múltiple',q:'¿Qué fue la Triple A?',o:['Una agrupación estudiantil','Una organización parapolicial de ultraderecha que persiguió y asesinó opositores','Una unidad del ERP','Una comisión creada por la CONADEP'],a:1},
+      {t:'Opción múltiple',q:'¿Qué ocurrió en Ezeiza el 20 de junio de 1973?',o:['La recuperación democrática de 1983','Un enfrentamiento armado entre sectores del peronismo','La creación de las Madres de Plaza de Mayo','El inicio del Juicio a las Juntas'],a:1},
+      {t:'Opción múltiple',q:'¿Qué fue el Operativo Independencia iniciado en Tucumán en 1975?',o:['Una elección provincial','Una intervención militar contra el ERP durante el gobierno constitucional','Una campaña por el boleto estudiantil','Un juicio a miembros de la Triple A'],a:1},
+      {t:'Opción múltiple',q:'¿Cuál fue una consecuencia inmediata del golpe de 1976?',o:['La ampliación del Congreso','La disolución del orden constitucional y el establecimiento de una dictadura','La legalización de todos los partidos','La convocatoria inmediata a elecciones'],a:1},
+      {t:'Opción múltiple',q:'¿Qué caracteriza al terrorismo de Estado?',o:['Una discusión entre partidos','El uso clandestino e ilegal del aparato estatal para secuestrar, torturar y desaparecer personas','Cualquier protesta política','Solamente la censura de periódicos'],a:1},
+      {t:'Opción múltiple',q:'¿Qué explicación resulta más completa sobre la Noche de los Lápices?',o:['Los jóvenes solamente reclamaban el boleto y ninguno militaba','Todos participaban en acciones armadas','Eran estudiantes, la mayoría tenía militancia política y el boleto fue parte de su experiencia','Fueron detenidos mediante órdenes judiciales y liberados'],a:2},
+      {t:'Opción múltiple',q:'¿Qué permite afirmar la militancia política de una persona?',o:['Que necesariamente utilizó armas','Que participó en una organización o causa, pero no prueba por sí sola una acción armada','Que perdió sus derechos legales','Que toda su familia tenía la misma ideología'],a:1},
+      {t:'Opción múltiple',q:'Si existía sospecha de un delito, ¿qué debía hacer legalmente el Estado?',o:['Secuestrar sin informar a la familia','Investigar, acusar y juzgar con derecho de defensa','Aplicar tortura para obtener información','Hacer desaparecer al sospechoso'],a:1},
+      {t:'Opción múltiple',q:'¿Cuál fue el reclamo que reunió inicialmente a las Madres de Plaza de Mayo en 1977?',o:['La creación de un partido político','Conocer el paradero y exigir la aparición con vida de sus hijos desaparecidos','Apoyar a Hugo Chávez','Solicitar cargos en el gobierno'],a:1},
+      {t:'Opción múltiple',q:'Bonafini expresó años después admiración por Hugo Chávez. ¿Qué conclusión permite ese dato?',o:['Que todas las Madres eran comunistas desde 1977','Que todos sus hijos pertenecían al ERP','Que Bonafini manifestó afinidad con Chávez en una etapa posterior','Que Chávez creó Madres de Plaza de Mayo'],a:2},
+      {t:'Opción múltiple',q:'¿Por qué no puede atribuirse una sola ideología a todas las Madres?',o:['Porque nunca hablaron de política','Porque el movimiento tuvo trayectorias diversas y se dividió en 1986 por diferencias políticas y organizativas','Porque ninguna tenía hijos desaparecidos','Porque surgieron después de 2000'],a:1},
+      {t:'Opción múltiple',q:'¿Cuál es el mejor método para evaluar un video conmemorativo?',o:['Creerlo porque tiene música e imágenes','Rechazarlo por ser institucional','Identificar autor, propósito, pruebas y contrastarlo con otras fuentes','Copiar su descripción completa'],a:2},
+      {t:'Cronología',q:'¿Cuál de estos acontecimientos ocurrió primero?',o:['Golpe de Estado del 24 de marzo','Cordobazo','Creación de las Madres de Plaza de Mayo','Juicio a las Juntas'],a:1},
+      {t:'Cronología',q:'¿Cuál secuencia está ordenada correctamente?',o:['Golpe de 1976 - Cordobazo - elecciones de 1973 - CONADEP','Cordobazo - elecciones de 1973 - golpe de 1976 - CONADEP','CONADEP - Cordobazo - golpe de 1976 - elecciones de 1973','Elecciones de 1973 - Cordobazo - CONADEP - golpe de 1976'],a:1},
+      {t:'Respuesta breve',q:'Completá con una sigla: el brazo armado del Partido Revolucionario de los Trabajadores fue el _____.',a:['erp','e.r.p.']},
+      {t:'Respuesta breve',q:'Completá: la organización parapolicial conocida como Alianza Anticomunista Argentina se abrevia _____.',a:['triple a','aaa','a.a.a.']},
+      {t:'Respuesta breve',q:'Completá con una palabra: la existencia de delitos guerrilleros explica parte del contexto, pero no ________ el terrorismo de Estado.',a:['justifica','legitima','autoriza']}
+    ];
+
+    const KEY='historia4to_v1';
+    const $=id=>document.getElementById(id);
+    const screens=['startScreen','quizScreen','resultScreen','lockedScreen'];
+    let state={name:'',course:'',index:0,correct:0,answers:[],startedAt:'',finishedAt:'',done:false};
+    let selection=null;
+
+    function show(id){ screens.forEach(x=>$(x).classList.toggle('hidden',x!==id)); }
+    function save(){ localStorage.setItem(KEY,JSON.stringify(state)); }
+    function load(){ try{return JSON.parse(localStorage.getItem(KEY))}catch{return null} }
+    function normalize(v){return v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().replace(/\s+/g,' ')}
+    function shuffleOptions(q,index){
+      if(!q.o) return null;
+      const seed=[...state.name].reduce((n,c)=>n+c.charCodeAt(0),index*97+17);
+      return q.o.map((text,i)=>({text,correct:i===q.a,rank:(seed*(i+3)*9301+49297)%233280})).sort((a,b)=>a.rank-b.rank);
+    }
+    function renderQuestion(){
+      selection=null; $('confirmBtn').disabled=true; $('message').textContent='';
+      const q=QUESTIONS[state.index];
+      $('studentLabel').textContent=`${state.name} · ${state.course}`;
+      $('questionCounter').textContent=`Pregunta ${state.index+1} de ${QUESTIONS.length}`;
+      $('progressBar').style.width=`${(state.index/QUESTIONS.length)*100}%`;
+      $('questionType').textContent=q.t; $('questionText').textContent=q.q;
+      const area=$('answers'); area.innerHTML='';
+      if(q.o){
+        shuffleOptions(q,state.index).forEach((op,i)=>{
+          const b=document.createElement('button'); b.type='button'; b.className='option';
+          b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span></span>`;
+          b.lastElementChild.textContent=op.text;
+          b.addEventListener('click',()=>{ area.querySelectorAll('.option').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); selection=op; $('confirmBtn').disabled=false; });
+          area.appendChild(b);
+        });
+      } else {
+        const input=document.createElement('input'); input.type='text'; input.maxLength=45; input.autocomplete='off'; input.placeholder='Escribí solamente la palabra o sigla'; input.setAttribute('aria-label','Respuesta');
+        input.addEventListener('paste',e=>{e.preventDefault();$('message').textContent='En esta actividad no se puede pegar texto.'});
+        input.addEventListener('drop',e=>e.preventDefault());
+        input.addEventListener('input',()=>{selection=input.value;$('confirmBtn').disabled=normalize(selection).length<2;$('message').textContent=''});
+        area.appendChild(input);
+        const help=document.createElement('p'); help.className='short-help'; help.textContent='Se aceptan mayúsculas o minúsculas. Revisá antes de confirmar.'; area.appendChild(help); input.focus();
+      }
+    }
+    function start(){
+      const name=$('studentName').value.trim(), course=$('studentCourse').value.trim();
+      if(name.split(/\s+/).length<2){$('studentName').focus();$('studentName').style.borderColor='var(--red)';return}
+      state={name,course:course||'4.º año',index:0,correct:0,answers:[],startedAt:new Date().toISOString(),finishedAt:'',done:false}; save(); show('quizScreen'); $('topStatus').textContent='Evaluación en curso'; renderQuestion();
+    }
+    function confirm(){
+      if(selection===null)return;
+      const q=QUESTIONS[state.index];
+      const ok=q.o?selection.correct:q.a.map(normalize).includes(normalize(selection));
+      state.answers.push({question:state.index,ok}); if(ok)state.correct++;
+      state.index++; save();
+      if(state.index>=QUESTIONS.length) finish(); else renderQuestion();
+    }
+    function hashCode(text){let h=2166136261;for(let i=0;i<text.length;i++){h^=text.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(36).toUpperCase().padStart(7,'0').slice(0,7)}
+    function finish(){state.done=true;state.finishedAt=new Date().toISOString();state.code=hashCode(`${state.name}|${state.correct}|${state.finishedAt.slice(0,16)}`);save();renderResult()}
+    function renderResult(){
+      show('resultScreen'); $('topStatus').textContent='Evaluación finalizada';
+      const grade=(state.correct/QUESTIONS.length*10).toFixed(1).replace('.',',');
+      $('grade').textContent=grade; $('scoreRing').style.setProperty('--score-angle',`${state.correct/QUESTIONS.length*360}deg`);
+      $('resultName').textContent=`${state.name} · ${state.course}`; $('correctCount').textContent=`${state.correct} de ${QUESTIONS.length}`;
+      $('resultDate').textContent=new Date(state.finishedAt).toLocaleString('es-AR',{dateStyle:'short',timeStyle:'short'}); $('resultCode').textContent=state.code;
+      $('resultMessage').textContent=state.correct>=14?'Completaste la actividad. Guardá esta constancia y entregá el código a la profesora.':'Completaste la actividad. Guardá esta constancia. La profesora indicará cómo continuar.';
+    }
+    function restore(){
+      const old=load(); if(!old)return;
+      state=old;
+      if(state.done){show('lockedScreen');$('topStatus').textContent='Intento registrado'}
+      else if(state.name&&state.index<QUESTIONS.length){show('quizScreen');$('topStatus').textContent='Evaluación en curso';renderQuestion()}
+    }
+    document.addEventListener('copy',e=>{if(!$('quizScreen').classList.contains('hidden'))e.preventDefault()});
+    document.addEventListener('contextmenu',e=>{if(!$('quizScreen').classList.contains('hidden'))e.preventDefault()});
+    window.addEventListener('beforeunload',e=>{if(state.name&&!state.done){e.preventDefault();e.returnValue=''}});
+    $('startBtn').addEventListener('click',start); $('confirmBtn').addEventListener('click',confirm); $('printBtn').addEventListener('click',()=>window.print()); $('showResultBtn').addEventListener('click',renderResult);
+    restore();
+  </script>
+</body>
+</html>
